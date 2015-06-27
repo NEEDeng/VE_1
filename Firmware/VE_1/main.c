@@ -13,7 +13,7 @@
 *	\copyright 	GNU V2.0
 */
 
-#include "sam.h"
+#include "samd20g17.h"
 #include "Threads.h"
 #include "Board.h"
 struct thread_s list_thread_s[THREADS_MAX_N]; /**<Array contendo todas as threads do sistema.*/
@@ -23,36 +23,23 @@ struct thread_s list_thread_s[THREADS_MAX_N]; /**<Array contendo todas as thread
  *
  * \return Unused (ANSI-C compatibility).
  */
-char fn1(void)
-{
-	LED_RGB_SET(COLOUR_GREEN);
-}
-char fn2(void)
-{
-	LED_RGB_SET(COLOUR_BLUE);
-}
-char fn3(void)
-{
-	
-}
+
 int main(void)
 {
     /* Initialize the SAM system */
-    SystemInit();
-
-	thread_init();
-	thread_constructor(&fn1,10,0,0);
-	thread_constructor(&fn2,40,0,1);
-	thread_constructor(&fn3,90,0,2);
+	ve_1_init();
+		LED_RGB_SET(COLOUR_BLUE);
     while (1) 
     {
+		LED_RGB_TGL(COLOUR_RED);
+	//	LED_RGB_TGL(COLOUR_GREEN);
         //TODO:: Please write your application code 
     }
 }
 
 void TC0_Handler(void)
 {
-	thread_run();
+	threads_run();
 /*	if(Count>20)
 	{
 		
@@ -78,6 +65,6 @@ void TC0_Handler(void)
 	else
 	Count++;
 */
-	TC0->COUNT16.INTFLAG.reg |= TC_INTFLAG_OVF; //clear interrupt
+	THREAD_INTERRUPT_CLEAR();
 	
 }

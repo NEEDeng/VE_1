@@ -14,41 +14,34 @@
 #include "stdbool.h"
 int Count=20;
 char side=0;
-/**
- * \brief Application entry point.
- *
- * \return Unused (ANSI-C compatibility).
- */
+
 /**
 * @brief	Inicializa o timer 0.
 * @details	Essa funcao inicializa o timer 0 com XXhz e habilita a interrpucao.
 * @return	none
 */
-#define THREAD_CLK_FREQUENCY	8000000 
-#define THREAD_PRESCALER		1
-#define THREAD_FREQUENCY		1000
-#define THREAD_TOP_VAL			(THREAD_CLK_FREQUENCY/(THREAD_PRESCALER*THREAD_FREQUENCY)+1)
-void timer0Init(void)
+void thread_init(void)
 {
-	GCLK->CLKCTRL.reg			|=	GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_ID_TC0_TC1;
+	GCLK->CLKCTRL.reg			|=	GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_ID_TC0_TC1 | GCLK_CLKCTRL_GEN_GCLK0;
 	PM->APBCMASK.reg			|=	PM_APBCMASK_TC0; //enable clock to timer 0
-	TC0->COUNT16.EVCTRL.reg		|=	TC_EVCTRL_OVFEO;
-	TC0->COUNT16.CC[0].reg		=	THREAD_TOP_VAL;
+	THREAD_COUNT_CONF.EVCTRL.reg		|=	TC_EVCTRL_OVFEO;
+	THREAD_COUNT_CONF.CC[0].reg		=	THREAD_TOP_VAL;
 	
-	TC0->COUNT16.INTENSET.reg	=	TC_INTENSET_OVF; //enable overflow interrupt
-	TC0->COUNT16.CTRLA.reg		|=	TC_CTRLA_ENABLE | TC_CTRLA_WAVEGEN_MFRQ ;//| TC_CTRLA_PRESCALER_DIV2; //enable timmer
+	
+	THREAD_COUNT_CONF.INTENSET.reg	=	TC_INTENSET_OVF; //enable overflow interrupt
+	THREAD_COUNT_CONF.CTRLA.reg		|=	TC_CTRLA_ENABLE | TC_CTRLA_WAVEGEN_MFRQ ;//| TC_CTRLA_PRESCALER_DIV2; //enable timmer
 }
 
-
-void ledInit(void)
+void led_init(void)
 {
 	LED_RGB_PORT_CONF.DIRSET.reg		= LED_RGB_RED_PORT | LED_RGB_BLUE_PORT | LED_RGB_GREEN_PORT;
 	LED_RGB_CLR_ALL();
 }
-void motorInit(void)
+
+void motor_init(void)
 {
 	PM->APBCMASK.reg			=	PM_APBCMASK_TC2 | PM_APBCMASK_TC3;
-	GCLK->CLKCTRL.reg			=	GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_ID_TC2_TC3 ;
+	GCLK->CLKCTRL.reg			=	GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_ID_TC2_TC3 | GCLK_CLKCTRL_GEN_GCLK2;
 
 	PWM_MOTOR1_PORT_CONF.DIRSET.reg = PWM_MOTOR1_A_PORT | PWM_MOTOR1_B_PORT ;
 	PWM_MOTOR1_PORT_CONF.OUTCLR.reg = PWM_MOTOR1_A_PORT | PWM_MOTOR1_B_PORT ;
@@ -87,7 +80,9 @@ void motorInit(void)
 		
 	PWM_MOTOR2_TC_CONF.CTRLA.reg |= TC_CTRLA_ENABLE;
 }
-char usart5SendByte(unsigned char data)
+
+
+char debug_send_byte(unsigned char data)
 {
 	SERCOM5->USART.DATA.reg =  data;
 	while(!(SERCOM5->USART.INTFLAG.bit.TXC))
@@ -95,7 +90,8 @@ char usart5SendByte(unsigned char data)
 	SERCOM5->USART.INTFLAG.bit.TXC = true;
 	return 0;
 }
-char usart5SendData(unsigned char *data, unsigned int size)
+
+char debug_send_data(unsigned char *data, unsigned int size)
 {
 	for(int i = 0;i<size;i++)
 	{
@@ -103,11 +99,11 @@ char usart5SendData(unsigned char *data, unsigned int size)
 	}
 }
 
-void usart5Init()
+void  debug_init()
 {
 	PM->APBCMASK.reg |= PM_APBCMASK_SERCOM5; //Habilita alimentacao
 	while(SERCOM5->USART.STATUS.bit.SYNCBUSY);
-	GCLK->CLKCTRL.reg	=	GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_ID_SERCOM5_CORE ; //set
+	GCLK->CLKCTRL.reg	=	GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_ID_SERCOM5_CORE| GCLK_CLKCTRL_GEN_GCLK2; ; //set
 	while(GCLK->STATUS.bit.SYNCBUSY);
 	PORT->Group[1].DIRSET.reg = PORT_PB22; // configura pino como saida
 	PORT->Group[1].PMUX[11].reg |= PORT_PMUX_PMUXE_D; // seta multiplexador do pino PB22 como sendo D
@@ -122,8 +118,7 @@ void usart5Init()
 	while(SERCOM5->USART.STATUS.bit.SYNCBUSY);
 }
 
-
-void adcInit(void)
+void adc_init(void)
 {
 	PORT->Group[0].DIRSET.reg = PORT_PA12;
 	//volatile int i=0,k=0;
@@ -135,7 +130,7 @@ void adcInit(void)
 	PM->APBCMASK.reg |= PM_APBCMASK_ADC ;
 	PM->APBCMASK.reg |= PM_APBCMASK_ADC ;
 
-	GCLK->CLKCTRL.reg |= GCLK_CLKCTRL_ID_ADC | GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0;
+	GCLK->CLKCTRL.reg |= GCLK_CLKCTRL_ID_ADC | GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK2;
 	while(GCLK->STATUS.bit.SYNCBUSY);
 	
 	ADC->CTRLA.reg |= ADC_CTRLA_RESETVALUE;
@@ -192,30 +187,77 @@ void adcInit(void)
 			{
 				count++;
 				PORT->Group[0].OUTSET.reg = PORT_PA12 ;
+				
 			}
 			
 		}
 	}
 }
-void readADC(unsigned int number)
+
+void adc_read(unsigned int number)
 {
 	
 }
-void boardInit()
+
+void board_init()
 {
 	SystemInit();
-	//enable 8mhz operation
-	SYSCTRL->OSC8M.reg = (SYSCTRL->OSC8M.reg & ~SYSCTRL_OSC8M_PRESC_Msk)  | SYSCTRL_OSC8M_PRESC(0);
-	  
+	volatile unsigned int i=0;
 	WDT->CTRL.reg	&=	(1<<WDT_CTRL_ENABLE); //disable watchdog
 	 
-	SYSCTRL->XOSC.reg &= ~SYSCTRL_XOSC_ENABLE;
-	SYSCTRL->XOSC.reg = SYSCTRL_XOSC_AMPGC | SYSCTRL_XOSC_GAIN(3) | SYSCTRL_XOSC_XTALEN | SYSCTRL_XOSC_RUNSTDBY | SYSCTRL_XOSC_ENABLE;
+	 GCLK->GENCTRL.reg = GCLK_GENCTRL_ID_GCLK0 | GCLK_GENCTRL_SRC_OSC8M | GCLK_GENCTRL_RUNSTDBY | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_OE | GCLK_GENCTRL_IDC  ;
+	 while(GCLK->STATUS.bit.SYNCBUSY){}
+		 
+	//Habilita cristal externo
+	SYSCTRL->XOSC.reg = SYSCTRL_XOSC_AMPGC | SYSCTRL_XOSC_GAIN(3) | SYSCTRL_XOSC_XTALEN | SYSCTRL_XOSC_RUNSTDBY | SYSCTRL_XOSC_ENABLE  | SYSCTRL_XOSC_STARTUP(3);
 	while(!SYSCTRL->PCLKSR.bit.XOSCRDY){}
-	 
-	GCLK->GENCTRL.reg = GCLK_GENCTRL_ID_GCLK1 | GCLK_GENCTRL_SRC_XOSC | GCLK_GENCTRL_RUNSTDBY | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_OE | GCLK_GENCTRL_IDC ;
+	//Configura GLCK0 com cristal externo de 16Mhz
+	GCLK->GENDIV.reg = GCLK_GENDIV_DIV(0) | GCLK_GENDIV_ID_GCLK0;
+	GCLK->GENCTRL.reg = GCLK_GENCTRL_ID_GCLK0 | GCLK_GENCTRL_SRC_XOSC | GCLK_GENCTRL_RUNSTDBY | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_OE | GCLK_GENCTRL_IDC  ;
 	while(GCLK->STATUS.bit.SYNCBUSY){}
+			
+			
+	//Configura GLCK2 com cristal interno de 8Mhz
+	//enable 8mhz operation
+	SYSCTRL->OSC8M.reg = 0;
+	SYSCTRL->OSC8M.reg =  SYSCTRL_OSC8M_PRESC(0) | SYSCTRL_OSC8M_ENABLE | SYSCTRL_OSC8M_RUNSTDBY | SYSCTRL_OSC8M_ONDEMAND;
+	
+	GCLK->GENCTRL.reg = GCLK_GENCTRL_ID_GCLK2 | GCLK_GENCTRL_SRC_OSC8M | GCLK_GENCTRL_RUNSTDBY | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_OE | GCLK_GENCTRL_IDC  ;
+	while(GCLK->STATUS.bit.SYNCBUSY){}
+	
+	
+	GCLK->GENCTRL.reg = GCLK_GENCTRL_ID_GCLK1 | GCLK_GENCTRL_SRC_XOSC | GCLK_GENCTRL_RUNSTDBY | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_OE | GCLK_GENCTRL_IDC  ;
+	while(GCLK->STATUS.bit.SYNCBUSY){}	
+	//Configura GLCK0 com DFFL48
+	SYSCTRL->DFLLCTRL.reg &=  ~SYSCTRL_DFLLCTRL_ONDEMAND; //diable ondemand
+//	while(!SYSCTRL->PCLKSR.bit.DFLLRDY){}
+	SYSCTRL->INTFLAG.reg =  SYSCTRL_INTFLAG_BOD33RDY | SYSCTRL_INTFLAG_BOD33DET |SYSCTRL_INTFLAG_DFLLRDY;
+	
+	GCLK->CLKCTRL.reg = GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK1 | GCLK_CLKCTRL_ID_DFLL48M ; //para o ID dado utiliza o CLCK de GCLK1
+	while(GCLK->STATUS.bit.SYNCBUSY){}
+	
+	SYSCTRL->DFLLCTRL.reg = SYSCTRL_DFLLCTRL_ENABLE;
+	while(!SYSCTRL->PCLKSR.bit.DFLLRDY){}
+	SYSCTRL->DFLLMUL.reg = SYSCTRL_DFLLMUL_MUL(2) | SYSCTRL_DFLLMUL_CSTEP(10) | SYSCTRL_DFLLMUL_FSTEP(1);
+	SYSCTRL->DFLLVAL.reg = SYSCTRL_DFLLVAL_COARSE(10) | SYSCTRL_DFLLVAL_FINE(1);
+	
+	// END OF ERRATA	
+	
+	GCLK->GENCTRL.reg = GCLK_GENCTRL_ID_GCLK3 | GCLK_GENCTRL_SRC_DFLL48M | GCLK_GENCTRL_RUNSTDBY | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_OE | GCLK_GENCTRL_IDC ; //seta o GCLk com o source desejado
+	while(GCLK->STATUS.bit.SYNCBUSY){}	
+SYSCTRL->DFLLCTRL.reg = SYSCTRL_DFLLCTRL_MODE | SYSCTRL_DFLLCTRL_STABLE |  SYSCTRL_DFLLCTRL_RUNSTDBY | SYSCTRL_DFLLCTRL_ONDEMAND | SYSCTRL_DFLLCTRL_ENABLE;
+	while(!SYSCTRL->PCLKSR.bit.DFLLRDY){}
 
-	timer0Init();
-	NVIC_EnableIRQ(TC0_IRQn);
+
+		
+	led_init();
+	
+	
+	//adc_init();
+			
+		GCLK->GENCTRL.reg = GCLK_GENCTRL_ID_GCLK0 | GCLK_GENCTRL_SRC_DFLL48M | GCLK_GENCTRL_RUNSTDBY | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_IDC ;
+		while(GCLK->STATUS.bit.SYNCBUSY){}
+	//thread_init();
+	
+//	NVIC_EnableIRQ(TC0_IRQn);
 }

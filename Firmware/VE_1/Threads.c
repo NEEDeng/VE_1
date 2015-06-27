@@ -9,7 +9,20 @@
 #include "Threads.h"
 extern struct thread_s list_thread_s[THREADS_MAX_N]; 
 
-void thread_init()
+#define THREAD0_INDEX		0
+#define THREAD0_PRIORITY	0
+#define THREAD0_MS			1000
+#define THREAD1_INDEX		1
+#define THREAD1_PRIORITY	0
+#define THREAD1_MS			1000
+#define THREAD2_INDEX		2
+#define THREAD2_PRIORITY	0
+#define THREAD2_MS			1000
+#define THREAD3_INDEX		3
+#define THREAD3_PRIORITY	0
+#define THREAD3_MS			1000
+
+void threads_init()
 {
 	for(int i=0;i<THREADS_MAX_N;i++)
 	{
@@ -18,17 +31,17 @@ void thread_init()
 }
 
 
-void thread_constructor(char (*p2f)(void),int ms, char prioridade, int index)
+void threads_constructor(char (*p2f)(void),unsigned int ms, char prioridade, int index)
 {
 	list_thread_s[index].STATUS =	THREAD_STATUS_IDLE;
 	list_thread_s[index].p2f = p2f;
 	list_thread_s[index].count = 0;
 	list_thread_s[index].count_max = ms;
 	list_thread_s[index].index = index;
-	list_thread_s[index].prioridade = prioridade;	
+	list_thread_s[index].prioridade = prioridade;		
 }
 
-void thread_run(void)
+void threads_run(void)
 {
 	for(int i=0;i<THREADS_MAX_N;i++)
 	{

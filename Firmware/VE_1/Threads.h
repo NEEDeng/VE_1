@@ -17,17 +17,17 @@
 enum THREAD_STATUS_e  {THREAD_STATUS_IDLE, THREAD_STATUS_RUNNING, THREAD_STATUS_STOPPED, THREAD_STATUS_END, THREAD_STATUS_ABORTED, THREAD_STATUS_N_IMPLEMENTED };
 struct thread_s
 {
-	int		count;		/**< Valor atual da contagem da thread. */
-	int		count_max;	/**< Valor maximo do contador da thread. */
+	unsigned int		count;		/**< Valor atual da contagem da thread. */
+	unsigned int		count_max;	/**< Valor maximo do contador da thread. */
 	enum THREAD_STATUS_e	STATUS;		/**< Estado da thread. */
 	char	prioridade;	/**< Prioridade da thread */
 	int		index;		/**< Index da thread. */
 	char	(*p2f)(void); /**< Ponteiro para funcao correpondente*/		
 }stThread;
 
-void thread_init(void);
-void thread_run(void);
-void thread_constructor(char (*p2f)(void),int ms, char prioridade, int index);
+void threads_init(void);
+void threads_run(void);
+void threads_constructor(char (*p2f)(void),unsigned int ms, char prioridade, int index);
 
 
 #endif /* THREADS_H_ */

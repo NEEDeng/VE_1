@@ -10,6 +10,8 @@
 
 #ifndef BOARD_H_
 #define BOARD_H_
+#include "sam.h"
+#include "samd20g17.h"
 
 #define PWM_MOTOR1_A_PORT		PORT_PA16
 #define PWM_MOTOR1_B_PORT		PORT_PA17
@@ -45,14 +47,31 @@
 #define ADC_MOTOR2_MUXPOS			ADC_INPUTCTRL_MUXPOS_PIN18
 
 #define LED_RGB_RED_PORT		PORT_PA11
-#define LED_RGB_BLUE_PORT		PORT_PA12
-#define LED_RGB_GREEN_PORT		PORT_PA13
+#define LED_RGB_BLUE_PORT		PORT_PA13
+#define LED_RGB_GREEN_PORT		PORT_PA12
 #define COLOUR_RED				LED_RGB_RED_PORT
 #define COLOUR_BLUE				LED_RGB_BLUE_PORT
 #define COLOUR_GREEN			LED_RGB_GREEN_PORT
 #define LED_RGB_PORT_CONF		PORT->Group[0]
 #define LED_RGB_SET(COLOUR)		LED_RGB_PORT_CONF.OUTCLR.reg = COLOUR
+#define LED_RGB_TGL(COLOUR)		LED_RGB_PORT_CONF.OUTTGL.reg = COLOUR
 #define LED_RGB_CLR(COLOUR)		LED_RGB_PORT_CONF.OUTSET.reg = COLOUR
 #define LED_RGB_CLR_ALL()			LED_RGB_PORT_CONF.OUTSET.reg = COLOUR_RED | LED_RGB_BLUE_PORT | LED_RGB_GREEN_PORT
 
+#define THREAD_CLK_FREQUENCY	8000000
+#define THREAD_PRESCALER		1
+#define THREAD_FREQUENCY		100000
+#define THREAD_TOP_VAL			10000 //((THREAD_CLK_FREQUENCY)/(THREAD_PRESCALER*THREAD_FREQUENCY)+1)
+#define THREAD_COUNT_CONF		TC0->COUNT16
+#define THREAD_INTERRUPT_CLEAR()	THREAD_COUNT_CONF.INTFLAG.reg |= TC_INTFLAG_OVF //clear interrupt
+
+void thread_init(void);
+void led_init(void);
+void motor_init(void);
+char debug_send_byte(unsigned char data);
+char debug_send_data(unsigned char *data, unsigned int size);
+void  debug_init(void);
+void adc_init(void);
+void adc_read(unsigned int number);
+void board_init(void);
 #endif /* BOARD_H_ */
