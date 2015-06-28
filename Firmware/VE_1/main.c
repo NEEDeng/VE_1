@@ -31,8 +31,8 @@ int main(void)
 		LED_RGB_SET(COLOUR_BLUE);
     while (1) 
     {
-		LED_RGB_TGL(COLOUR_RED);
-	//	LED_RGB_TGL(COLOUR_GREEN);
+		LED_RGB_SET(COLOUR_RED);
+		LED_RGB_CLR(COLOUR_RED);
         //TODO:: Please write your application code 
     }
 }
