@@ -10,7 +10,7 @@
 #define VE_1_H_
 
 
-void ve_1Init(void);
+void ve_1_init(void);
 
 
 #endif /* VE_1_H_ */

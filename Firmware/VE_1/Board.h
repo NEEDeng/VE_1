@@ -12,6 +12,9 @@
 #define BOARD_H_
 #include "sam.h"
 #include "samd20g17.h"
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define PWM_MOTOR1_A_PORT		PORT_PA16
 #define PWM_MOTOR1_B_PORT		PORT_PA17
@@ -60,7 +63,7 @@
 
 #define THREAD_CLK_FREQUENCY	8000000
 #define THREAD_PRESCALER		1
-#define THREAD_FREQUENCY		1000000
+#define THREAD_FREQUENCY		100000
 #define THREAD_FREQUENCY_OFF	0
 #define THREAD_TOP_VAL			((THREAD_CLK_FREQUENCY)/(THREAD_PRESCALER*THREAD_FREQUENCY)-1+THREAD_FREQUENCY_OFF)
 #define THREAD_COUNT_CONF		TC0->COUNT16
@@ -69,10 +72,11 @@
 void thread_init(void);
 void led_init(void);
 void motor_init(void);
-char debug_send_byte(unsigned char data);
-char debug_send_data(unsigned char *data, unsigned int size);
+char debug_send_byte( char data);
+char debug_send_data( char *data,  int size);
 void  debug_init(void);
 void adc_init(void);
-void adc_read(unsigned int number);
+void adc_read( void);
 void board_init(void);
+void adc_test(void);
 #endif /* BOARD_H_ */

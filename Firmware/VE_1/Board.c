@@ -10,8 +10,10 @@
 #include "board.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "samd20g17.h"
-#include "stdbool.h"
+
+
 int Count=20;
 char side=0;
 
@@ -40,6 +42,7 @@ void thread_init(void)
 	
 	THREAD_COUNT_CONF.CTRLA.reg	=	TC_CTRLA_ENABLE | TC_CTRLA_WAVEGEN_MFRQ   | TC_CTRLA_RUNSTDBY ;//| TC_CTRLA_PRESCALER_DIV2; //enable timmer
 	while(THREAD_COUNT_CONF.STATUS.bit.SYNCBUSY){}
+		NVIC_EnableIRQ(TC0_IRQn);
 }
 
 void led_init(void)
@@ -92,7 +95,7 @@ void motor_init(void)
 }
 
 
-char debug_send_byte(unsigned char data)
+char debug_send_byte( char data)
 {
 	SERCOM5->USART.DATA.reg =  data;
 	while(!(SERCOM5->USART.INTFLAG.bit.TXC))
@@ -101,38 +104,50 @@ char debug_send_byte(unsigned char data)
 	return 0;
 }
 
-char debug_send_data(unsigned char *data, unsigned int size)
+char debug_send_data(char *data,  int size)
 {
 	for(int i = 0;i<size;i++)
 	{
-		usartSendByte(*data);
+		debug_send_byte(*data);
 	}
+	return 0;
 }
+#define DEBUG_CLK_FREQUENCY	8000000
+#define DEBUG_PRESCALER		1
+#define DEBUG_FREQUENCY		38400
+#define DEBUG_TOP_VAL		(65536*(1-16*((float)DEBUG_FREQUENCY/(float)DEBUG_CLK_FREQUENCY)))
 
 void  debug_init()
 {
-	PM->APBCMASK.reg |= PM_APBCMASK_SERCOM5; //Habilita alimentacao
+	
 	while(SERCOM5->USART.STATUS.bit.SYNCBUSY);
-	GCLK->CLKCTRL.reg	=	GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_ID_SERCOM5_CORE| GCLK_CLKCTRL_GEN_GCLK2; ; //set
-	while(GCLK->STATUS.bit.SYNCBUSY);
+	GCLK->CLKCTRL.reg	=	GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_ID_SERCOM5_CORE  | GCLK_CLKCTRL_GEN_GCLK2; //set
+	PM->APBCMASK.reg |= PM_APBCMASK_SERCOM5; //Habilita alimentacao
+	while(SERCOM5->USART.STATUS.reg & SERCOM_USART_STATUS_SYNCBUSY);
+	
 	PORT->Group[1].DIRSET.reg = PORT_PB22; // configura pino como saida
 	PORT->Group[1].PMUX[11].reg |= PORT_PMUX_PMUXE_D; // seta multiplexador do pino PB22 como sendo D
 	PORT->Group[1].PINCFG[22].reg = PORT_PINCFG_PMUXEN | PORT_PINCFG_PULLEN;
-
-	SERCOM5->USART.CTRLA.reg |= SERCOM_USART_CTRLA_TXPO_PAD2 | SERCOM_USART_CTRLA_MODE(1)| SERCOM_USART_CTRLA_DORD;//| SERCOM_USART_CTRLA_MODE;
+	
+	SERCOM5->USART.CTRLA.reg |= SERCOM_USART_CTRLA_TXPO_PAD2 |  SERCOM_USART_CTRLA_DORD |  SERCOM_USART_CTRLA_MODE_USART_INT_CLK;//bug in mode(1) = assynchronous
+	while(SERCOM5->USART.STATUS.reg & SERCOM_USART_STATUS_SYNCBUSY);
 	SERCOM5->USART.CTRLB.reg |= SERCOM_USART_CTRLB_TXEN;
+while(SERCOM5->USART.STATUS.reg & SERCOM_USART_STATUS_SYNCBUSY);
 
-	SERCOM5->USART.BAUD.reg = 60502;
+	SERCOM5->USART.BAUD.reg = DEBUG_TOP_VAL;
+while(SERCOM5->USART.STATUS.reg & SERCOM_USART_STATUS_SYNCBUSY);
+	SERCOM5->USART.CTRLA.reg = SERCOM5->USART.CTRLA.reg  |  SERCOM_USART_CTRLA_ENABLE ;
+	while(SERCOM5->USART.STATUS.reg & SERCOM_USART_STATUS_SYNCBUSY);
 
-	SERCOM5->USART.CTRLA.reg |=   SERCOM_USART_CTRLA_ENABLE ;
-	while(SERCOM5->USART.STATUS.bit.SYNCBUSY);
+	
+
 }
 
 void adc_init(void)
-{
-	PORT->Group[0].DIRSET.reg = PORT_PA12;
+{PORT->Group[0].DIRSET.reg = PORT_PA12;
 	//volatile int i=0,k=0;
-	
+//	configure_usart();
+
 	unsigned char valor_str[7];
 	
 	unsigned int valor_int=0;
@@ -140,7 +155,7 @@ void adc_init(void)
 	PM->APBCMASK.reg |= PM_APBCMASK_ADC ;
 	PM->APBCMASK.reg |= PM_APBCMASK_ADC ;
 
-	GCLK->CLKCTRL.reg |= GCLK_CLKCTRL_ID_ADC | GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK2;
+	GCLK->CLKCTRL.reg |= GCLK_CLKCTRL_ID_ADC | GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0;
 	while(GCLK->STATUS.bit.SYNCBUSY);
 	
 	ADC->CTRLA.reg |= ADC_CTRLA_RESETVALUE;
@@ -152,12 +167,12 @@ void adc_init(void)
 
 	
 
-	ADC->AVGCTRL.reg = ADC_AVGCTRL_SAMPLENUM_64 | (4<<ADC_AVGCTRL_ADJRES_Pos);
+	//ADC->AVGCTRL.reg = ADC_AVGCTRL_SAMPLENUM_64 | (4<<ADC_AVGCTRL_ADJRES_Pos);
 	ADC->REFCTRL.reg |= ADC_REFCTRL_REFSEL_INTVCC1;
 	//ADC->SAMPCTRL.reg = ADC_SAMPCTRL_SAMPLEN(0xFF);
 	ADC->INPUTCTRL.reg |= ADC_INPUTCTRL_MUXPOS_PIN18 | ADC_INPUTCTRL_MUXNEG_GND | ADC_INPUTCTRL_GAIN_DIV2;
 	while(ADC->STATUS.bit.SYNCBUSY){}
-	ADC->CTRLB.reg |= ADC_CTRLB_FREERUN | ADC_CTRLB_PRESCALER_DIV256 | ADC_CTRLB_RESSEL_16BIT;
+	ADC->CTRLB.reg |= ADC_CTRLB_FREERUN | ADC_CTRLB_PRESCALER_DIV256;//| ADC_CTRLB_RESSEL_16BIT;
 	while(ADC->STATUS.bit.SYNCBUSY){}
 	ADC->CTRLA.reg |= ADC_CTRLA_ENABLE;
 	while(ADC->STATUS.bit.SYNCBUSY){}
@@ -171,14 +186,20 @@ void adc_init(void)
 			while(ADC->STATUS.bit.SYNCBUSY){}
 			
 			valor_int = ADC->RESULT.reg;
-					
+			SERCOM5->USART.INTFLAG.bit.TXC = true;
+			
 			sprintf(valor_str ,"%0.5d" , valor_int);
 			//itoa(valor_int,valor_str,10);
 			valor_str[5] ='\r';
 			valor_str[6] = '\n';
 			for(txCount=0;txCount<7;txCount++)
 			{
-			
+				SERCOM5->USART.DATA.reg =  valor_str[txCount] ;
+				while(!(SERCOM5->USART.INTFLAG.bit.TXC))
+				{
+					
+				}
+				
 			}
 			for(ii=0;ii<10000;ii++)
 			{
@@ -197,17 +218,36 @@ void adc_init(void)
 			{
 				count++;
 				PORT->Group[0].OUTSET.reg = PORT_PA12 ;
-				
 			}
 			
 		}
 	}
+
 }
 
-void adc_read(unsigned int number)
+
+void adc_read(void)
 {
+	/*
+	volatile unsigned char valor_str[7];
 	
+	volatile unsigned int valor_int=0;
+	
+	ADC->SWTRIG.bit.START = true;
+	while(ADC->INTFLAG.bit.RESRDY){}
+	while(ADC->STATUS.bit.SYNCBUSY){}
+	
+	valor_int = 20;
+	
+	sprintf(valor_str ,"%0.5d" , valor_int);
+	//itoa(valor_int,valor_str,10);
+	valor_str[5] ='\r';
+	valor_str[6] = '\n';
+	debug_send_data(valor_str,7);
+	
+	ADC->INTFLAG.reg = ADC_INTFLAG_RESRDY;*/
 }
+
 void clock_init()
 {
 		WDT->CTRL.reg	&=	(1<<WDT_CTRL_ENABLE); //disable watchdog
@@ -240,7 +280,7 @@ void clock_init()
 		SYSCTRL->INTFLAG.reg =  SYSCTRL_INTFLAG_BOD33RDY | SYSCTRL_INTFLAG_BOD33DET |SYSCTRL_INTFLAG_DFLLRDY;
 		
 		//Configura o clock base do DFLL48 como sendo GLCK1
-		GCLK->CLKCTRL.reg = GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK1 | GCLK_CLKCTRL_ID_DFLL48M ; //para o ID dado utiliza o CLCK de GCLK1
+	GCLK->CLKCTRL.reg = GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK1 | GCLK_CLKCTRL_ID_DFLL48M ; //para o ID dado utiliza o CLCK de GCLK1
 		while(GCLK->STATUS.bit.SYNCBUSY){}
 		//ERRATA
 		SYSCTRL->DFLLCTRL.reg = SYSCTRL_DFLLCTRL_ENABLE;
@@ -274,11 +314,13 @@ void clock_init()
 void board_init()
 {
 	SystemInit();
-	
+		
 	clock_init();
+	
 	led_init();
-	
+	motor_init();
 	thread_init();
-	
+	debug_init();
+	adc_init();
 	
 }

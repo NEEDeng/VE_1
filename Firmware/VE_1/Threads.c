@@ -31,12 +31,12 @@ void threads_init()
 }
 
 
-void threads_constructor(char (*p2f)(void),unsigned int ms, char prioridade, int index)
+void threads_constructor(char (*p2f)(void),unsigned int dec_us, char prioridade, int index)
 {
 	list_thread_s[index].STATUS =	THREAD_STATUS_IDLE;
 	list_thread_s[index].p2f = p2f;
 	list_thread_s[index].count = 0;
-	list_thread_s[index].count_max = ms;
+	list_thread_s[index].count_max = dec_us;
 	list_thread_s[index].index = index;
 	list_thread_s[index].prioridade = prioridade;		
 }

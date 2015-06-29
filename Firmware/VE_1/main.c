@@ -16,6 +16,7 @@
 #include "samd20g17.h"
 #include "Threads.h"
 #include "Board.h"
+#include "VE_1.h"
 struct thread_s list_thread_s[THREADS_MAX_N]; /**<Array contendo todas as threads do sistema.*/
 
 /**
@@ -29,50 +30,17 @@ int main(void)
     /* Initialize the SAM system */
 	ve_1_init();
 		LED_RGB_SET(COLOUR_BLUE);
+		volatile int ii=0;
+		
     while (1) 
     {
-					
-					threads_run();
-		
-	//	LED_RGB_SET(COLOUR_RED);
-	//	LED_RGB_CLR(COLOUR_RED);
-        //TODO:: Please write your application code 
+		threads_run();
+	
     }
 }
 
 void TC0_Handler(void)
 {
-	
-/*	if(Count>20)
-	{
-		
-		
-		if(side==0)
-		{
-			PORT->Group[0].OUTCLR.reg = PIN1_MOTOR | PIN3_MOTOR;
-			PORT->Group[0].OUTSET.reg = PIN4_MOTOR | PIN2_MOTOR;
-			PORT->Group[0].OUTSET.reg = PORT_PA12;
-			PORT->Group[0].OUTCLR.reg = PORT_PA13;
-			side =1;
-		}
-		else
-		{
-			PORT->Group[0].OUTSET.reg = PIN1_MOTOR | PIN3_MOTOR;
-			PORT->Group[0].OUTCLR.reg = PIN4_MOTOR | PIN2_MOTOR;
-			PORT->Group[0].OUTSET.reg = PORT_PA13;
-			PORT->Group[0].OUTCLR.reg = PORT_PA12;
-			side =0;
-		}
-		Count=0;
-	}
-	else
-	Count++;
-*/
-	//THREAD_INTERRUPT_CLEAR();
-	 threads_increment();
-	
+	threads_increment();
 	TC0->COUNT16.INTFLAG.reg = TC_INTFLAG_OVF;
-	
-	
-	
 }
