@@ -23,7 +23,7 @@ struct thread_s list_thread_s[THREADS_MAX_N]; /**<Array contendo todas as thread
  *
  * \return Unused (ANSI-C compatibility).
  */
-
+volatile char TC0_FLAG = 0;
 int main(void)
 {
     /* Initialize the SAM system */
@@ -31,15 +31,18 @@ int main(void)
 		LED_RGB_SET(COLOUR_BLUE);
     while (1) 
     {
-		LED_RGB_SET(COLOUR_RED);
-		LED_RGB_CLR(COLOUR_RED);
+					
+					threads_run();
+		
+	//	LED_RGB_SET(COLOUR_RED);
+	//	LED_RGB_CLR(COLOUR_RED);
         //TODO:: Please write your application code 
     }
 }
 
 void TC0_Handler(void)
 {
-	threads_run();
+	
 /*	if(Count>20)
 	{
 		
@@ -65,6 +68,11 @@ void TC0_Handler(void)
 	else
 	Count++;
 */
-	THREAD_INTERRUPT_CLEAR();
+	//THREAD_INTERRUPT_CLEAR();
+	 threads_increment();
+	
+	TC0->COUNT16.INTFLAG.reg = TC_INTFLAG_OVF;
+	
+	
 	
 }

@@ -41,26 +41,36 @@ void threads_constructor(char (*p2f)(void),unsigned int ms, char prioridade, int
 	list_thread_s[index].prioridade = prioridade;		
 }
 
-void threads_run(void)
+void threads_increment(void)
 {
 	for(int i=0;i<THREADS_MAX_N;i++)
 	{
 		if(list_thread_s[i].STATUS == THREAD_STATUS_RUNNING)
 		{
-			if(list_thread_s[i].count < list_thread_s[i].count_max)
-			{
+			
 				list_thread_s[i].count++;
-			}
-			else
-			{
-				list_thread_s[i].count = 0;
-				(*list_thread_s[i].p2f)();
-			}
+			
 		}
 		else if(list_thread_s[i].STATUS == THREAD_STATUS_IDLE)
 		{
 			list_thread_s[i].STATUS = THREAD_STATUS_RUNNING;
 			list_thread_s[i].count = 0;
 		}
+	}
+}
+void threads_run(void)
+{
+	for(int i=0;i<THREADS_MAX_N;i++)
+	{
+		if(list_thread_s[i].STATUS == THREAD_STATUS_RUNNING)
+		{
+			if(list_thread_s[i].count >= list_thread_s[i].count_max)
+			{
+			list_thread_s[i].count = 0;
+			(*list_thread_s[i].p2f)();
+			}
+		
+		}
+		
 	}
 }

@@ -28,6 +28,6 @@ struct thread_s
 void threads_init(void);
 void threads_run(void);
 void threads_constructor(char (*p2f)(void),unsigned int ms, char prioridade, int index);
-
+void threads_increment(void);
 
 #endif /* THREADS_H_ */
