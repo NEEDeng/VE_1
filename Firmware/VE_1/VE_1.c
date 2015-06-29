@@ -5,7 +5,11 @@
 char fn1(void)
 {
 //	debug_send_byte('G');
-
+debug_s.data_tx[0] = 'T';
+debug_s.data_tx[1] = 'U';
+debug_s.data_tx[2] = 'L';
+	//debug_send_data_handler(3);
+	adc_read();
 	LED_RGB_TGL(COLOUR_RED);
 
 	return 0;

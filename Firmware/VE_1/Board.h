@@ -79,4 +79,14 @@ void adc_init(void);
 void adc_read( void);
 void board_init(void);
 void adc_test(void);
+char debug_send_byte_hand();
+enum DEBUG_S_FLAG {DEBUG_S_SENDING, DEBUG_S_IDLE, DEBUG_S_RECEIVING};
+struct _debug_s
+{
+	int size_to_send;
+	int size_sended;
+	char data_tx[12];
+	char flag;
+	}debug_s;
+
 #endif /* BOARD_H_ */

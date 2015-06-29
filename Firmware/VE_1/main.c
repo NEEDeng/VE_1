@@ -17,6 +17,8 @@
 #include "Threads.h"
 #include "Board.h"
 #include "VE_1.h"
+#define true 1
+#define false !true
 struct thread_s list_thread_s[THREADS_MAX_N]; /**<Array contendo todas as threads do sistema.*/
 
 /**
@@ -24,7 +26,8 @@ struct thread_s list_thread_s[THREADS_MAX_N]; /**<Array contendo todas as thread
  *
  * \return Unused (ANSI-C compatibility).
  */
-volatile char TC0_FLAG = 0;
+volatile char TC0_FLAG = false;
+volatile char SERCOM5_FLAG = false;
 int main(void)
 {
     /* Initialize the SAM system */
@@ -34,13 +37,35 @@ int main(void)
 		
     while (1) 
     {
-		threads_run();
+		
+		if(TC0_FLAG== true)
+		{
+			threads_increment();
+			threads_run();
+			TC0_FLAG = false;
+		}
+		if(SERCOM5_FLAG == true)
+		{
+			debug_send_byte_hand();
+			SERCOM5_FLAG = false;
+		}
 	
     }
 }
 
 void TC0_Handler(void)
 {
-	threads_increment();
+	TC0_FLAG = true;
 	TC0->COUNT16.INTFLAG.reg = TC_INTFLAG_OVF;
+}
+
+void SERCOM5_Handler()
+{
+	SERCOM5_FLAG = true;
+	SERCOM5->USART.INTFLAG.reg = SERCOM_USART_INTFLAG_TXC | SERCOM_USART_INTFLAG_DRE;
+}
+
+void ADC_Handler()
+{
+	
 }

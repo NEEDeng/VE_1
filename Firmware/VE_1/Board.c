@@ -12,7 +12,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "samd20g17.h"
-
+//#include "config.h"
+#include <_syslist.h>
 
 int Count=20;
 char side=0;
@@ -53,25 +54,27 @@ void led_init(void)
 
 void motor_init(void)
 {
-	PM->APBCMASK.reg			=	PM_APBCMASK_TC2 | PM_APBCMASK_TC3;
+	
 	GCLK->CLKCTRL.reg			=	GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_ID_TC2_TC3 | GCLK_CLKCTRL_GEN_GCLK2;
-
+	while(GCLK->STATUS.bit.SYNCBUSY){}
+	PM->APBCMASK.reg			|=	PM_APBCMASK_TC2 | PM_APBCMASK_TC3;
+	while(TC2->COUNT8.STATUS.bit.SYNCBUSY);
 	PWM_MOTOR1_PORT_CONF.DIRSET.reg = PWM_MOTOR1_A_PORT | PWM_MOTOR1_B_PORT ;
 	PWM_MOTOR1_PORT_CONF.OUTCLR.reg = PWM_MOTOR1_A_PORT | PWM_MOTOR1_B_PORT ;
 	
-	PWM_MOTOR1_PORT_CONF.PMUX[8].reg |= PWM_MOTOR1_A_PMUX;
+		PWM_MOTOR1_PORT_CONF.PMUX[8].reg |= PWM_MOTOR1_A_PMUX;
 	PWM_MOTOR1_PORT_CONF.PMUX[8].reg |= PWM_MOTOR1_B_PMUX;
 	
 	PWM_MOTOR1_PORT_CONF.PINCFG[PWM_MOTOR1_A_PORT_N].reg |= PORT_PINCFG_PMUXEN | PORT_PINCFG_PULLEN;
 	PWM_MOTOR1_PORT_CONF.PINCFG[PWM_MOTOR1_B_PORT_N].reg |= PORT_PINCFG_PMUXEN | PORT_PINCFG_PULLEN;
-		
+	
 	PWM_MOTOR1_TC_CONF.CTRLA.reg |= TC_CTRLA_WAVEGEN_NPWM | TC_CTRLA_MODE_COUNT8 ;
 	PWM_MOTOR1_TC_CONF.PER.reg	=	0xFF;
 	PWM_MOTOR1_TC_A_DUTY.reg	=	0x00;
 	PWM_MOTOR1_TC_B_DUTY.reg	=	0x00;
 		
 	PWM_MOTOR1_TC_CONF.CTRLA.reg |= TC_CTRLA_ENABLE;
-		
+	while(TC2->COUNT8.STATUS.bit.SYNCBUSY);	
 	////MOTOR 2
 	PWM_MOTOR2_PORT_CONF.DIRSET.reg = PWM_MOTOR2_A_PORT | PWM_MOTOR2_B_PORT ;
 	PWM_MOTOR2_PORT_CONF.OUTCLR.reg = PWM_MOTOR2_A_PORT | PWM_MOTOR2_B_PORT ;
@@ -95,14 +98,50 @@ void motor_init(void)
 }
 
 
+
 char debug_send_byte( char data)
 {
-	SERCOM5->USART.DATA.reg =  data;
-	while(!(SERCOM5->USART.INTFLAG.bit.TXC))
-	{	}
-	SERCOM5->USART.INTFLAG.bit.TXC = true;
+	if((SERCOM5->USART.INTFLAG.bit.DRE))
+	{
+		SERCOM5->USART.INTFLAG.bit.DRE = true;
+		SERCOM5->USART.DATA.reg =  data;
+		
+		
+	return 0;	
+	}
+	return -1;
+}
+	char debug_send_byte_hand()
+	{
+		if(debug_s.flag ==  DEBUG_S_SENDING)
+		{
+			if(debug_s.size_sended >= debug_s.size_to_send)
+			{
+				debug_s.flag =  DEBUG_S_IDLE;
+			}
+			else
+			{
+				SERCOM5->USART.DATA.reg = debug_s.data_tx[debug_s.size_sended];
+				debug_s.size_sended++;
+			}
+		}
+	
+	return 0;
+	}
+
+char debug_send_data_handler(int size)
+
+{
+	if(debug_s.flag == DEBUG_S_IDLE)
+	{
+		debug_s.size_to_send = size;
+		debug_s.size_sended = 0;
+		debug_s.flag = DEBUG_S_SENDING;
+		debug_send_byte_hand();
+	}
 	return 0;
 }
+
 
 char debug_send_data(char *data,  int size)
 {
@@ -131,15 +170,20 @@ void  debug_init()
 	
 	SERCOM5->USART.CTRLA.reg |= SERCOM_USART_CTRLA_TXPO_PAD2 |  SERCOM_USART_CTRLA_DORD |  SERCOM_USART_CTRLA_MODE_USART_INT_CLK;//bug in mode(1) = assynchronous
 	while(SERCOM5->USART.STATUS.reg & SERCOM_USART_STATUS_SYNCBUSY);
-	SERCOM5->USART.CTRLB.reg |= SERCOM_USART_CTRLB_TXEN;
+	SERCOM5->USART.CTRLB.reg |= SERCOM_USART_CTRLB_TXEN ;
 while(SERCOM5->USART.STATUS.reg & SERCOM_USART_STATUS_SYNCBUSY);
-
+SERCOM5->USART.INTENSET.reg = SERCOM_USART_INTENSET_TXC ;// | SERCOM_USART_INTENSET_DRE;
+	
 	SERCOM5->USART.BAUD.reg = DEBUG_TOP_VAL;
 while(SERCOM5->USART.STATUS.reg & SERCOM_USART_STATUS_SYNCBUSY);
 	SERCOM5->USART.CTRLA.reg = SERCOM5->USART.CTRLA.reg  |  SERCOM_USART_CTRLA_ENABLE ;
 	while(SERCOM5->USART.STATUS.reg & SERCOM_USART_STATUS_SYNCBUSY);
-
+	debug_s.flag = DEBUG_S_IDLE;
+	SERCOM5->USART.INTFLAG.reg = SERCOM_USART_INTFLAG_DRE | SERCOM_USART_INTFLAG_TXC | SERCOM_USART_INTFLAG_RXC;
+	while(SERCOM5->USART.STATUS.reg & SERCOM_USART_STATUS_SYNCBUSY);
+	NVIC_EnableIRQ(SERCOM5_IRQn);
 	
+
 
 }
 
@@ -152,11 +196,12 @@ void adc_init(void)
 	
 	unsigned int valor_int=0;
 	
-	PM->APBCMASK.reg |= PM_APBCMASK_ADC ;
-	PM->APBCMASK.reg |= PM_APBCMASK_ADC ;
+	
+
 
 	GCLK->CLKCTRL.reg |= GCLK_CLKCTRL_ID_ADC | GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0;
 	while(GCLK->STATUS.bit.SYNCBUSY);
+	PM->APBCMASK.reg |= PM_APBCMASK_ADC ;
 	
 	ADC->CTRLA.reg |= ADC_CTRLA_RESETVALUE;
 	while(ADC->STATUS.bit.SYNCBUSY){}
@@ -172,80 +217,35 @@ void adc_init(void)
 	//ADC->SAMPCTRL.reg = ADC_SAMPCTRL_SAMPLEN(0xFF);
 	ADC->INPUTCTRL.reg |= ADC_INPUTCTRL_MUXPOS_PIN18 | ADC_INPUTCTRL_MUXNEG_GND | ADC_INPUTCTRL_GAIN_DIV2;
 	while(ADC->STATUS.bit.SYNCBUSY){}
-	ADC->CTRLB.reg |= ADC_CTRLB_FREERUN | ADC_CTRLB_PRESCALER_DIV256;//| ADC_CTRLB_RESSEL_16BIT;
+	ADC->CTRLB.reg |=  ADC_CTRLB_PRESCALER_DIV256;//| ADC_CTRLB_RESSEL_16BIT;ADC_CTRLB_FREERUN
 	while(ADC->STATUS.bit.SYNCBUSY){}
 	ADC->CTRLA.reg |= ADC_CTRLA_ENABLE;
 	while(ADC->STATUS.bit.SYNCBUSY){}
 	ADC->SWTRIG.bit.START = true;
-	int count=0,txCount;
-	volatile unsigned int ii=0;
-	while(true)
-	{
-		if(ADC->INTFLAG.bit.RESRDY)
-		{
-			while(ADC->STATUS.bit.SYNCBUSY){}
-			
-			valor_int = ADC->RESULT.reg;
-			SERCOM5->USART.INTFLAG.bit.TXC = true;
-			
-			sprintf(valor_str ,"%0.5d" , valor_int);
-			//itoa(valor_int,valor_str,10);
-			valor_str[5] ='\r';
-			valor_str[6] = '\n';
-			for(txCount=0;txCount<7;txCount++)
-			{
-				SERCOM5->USART.DATA.reg =  valor_str[txCount] ;
-				while(!(SERCOM5->USART.INTFLAG.bit.TXC))
-				{
-					
-				}
-				
-			}
-			for(ii=0;ii<10000;ii++)
-			{
-				
-				
-			}
-			ADC->INTFLAG.reg = ADC_INTFLAG_RESRDY;
-			//	ADC->SWTRIG.bit.START = true;
-			while(ADC->STATUS.bit.SYNCBUSY){}
-			if(count>10000)
-			{
-				PORT->Group[0].OUTCLR.reg = PORT_PA12 ;
-				count =0;
-			}
-			else
-			{
-				count++;
-				PORT->Group[0].OUTSET.reg = PORT_PA12 ;
-			}
-			
-		}
-	}
 
 }
 
 
 void adc_read(void)
 {
-	/*
-	volatile unsigned char valor_str[7];
-	
-	volatile unsigned int valor_int=0;
+	static unsigned char valor_str[7];
+	static unsigned int valor_int=0;
 	
 	ADC->SWTRIG.bit.START = true;
-	while(ADC->INTFLAG.bit.RESRDY){}
-	while(ADC->STATUS.bit.SYNCBUSY){}
+	while(!ADC->INTFLAG.bit.RESRDY){}
 	
 	valor_int = 20;
 	
-	sprintf(valor_str ,"%0.5d" , valor_int);
+	//sprintf(valor_str ,"%0.5d" , valor_int);
 	//itoa(valor_int,valor_str,10);
 	valor_str[5] ='\r';
 	valor_str[6] = '\n';
-	debug_send_data(valor_str,7);
-	
-	ADC->INTFLAG.reg = ADC_INTFLAG_RESRDY;*/
+	for(int i=0;i<7;i++)
+	{
+		debug_s.data_tx[i] = valor_str[i];
+	}
+	ADC->INTFLAG.reg = ADC_INTFLAG_RESRDY;
+	debug_send_data_handler(7);
 }
 
 void clock_init()
@@ -317,10 +317,12 @@ void board_init()
 		
 	clock_init();
 	
-	led_init();
-	motor_init();
-	thread_init();
 	debug_init();
+	motor_init();
+	led_init();
+	
+	thread_init();
+	
 	adc_init();
 	
 }
