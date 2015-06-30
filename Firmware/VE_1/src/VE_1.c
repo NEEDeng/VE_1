@@ -26,6 +26,10 @@ char fn3(void)
 	
 	return 0;
 }
+char motor_th(void)
+{
+	
+}
 void ve_1_init(void)
 {
 	board_init();

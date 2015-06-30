@@ -15,23 +15,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .comment      00000071  00000000  00000000  00010090  2**0
                   CONTENTS, READONLY
-  6 .debug_info   0000eaf0  00000000  00000000  00010101  2**0
+  6 .debug_info   0000eb09  00000000  00000000  00010101  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000015f1  00000000  00000000  0001ebf1  2**0
+  7 .debug_abbrev 0000160b  00000000  00000000  0001ec0a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_loc    00001a21  00000000  00000000  000201e2  2**0
+  8 .debug_loc    00001a21  00000000  00000000  00020215  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_aranges 00000308  00000000  00000000  00021c03  2**0
+  9 .debug_aranges 00000310  00000000  00000000  00021c36  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000258  00000000  00000000  00021f0b  2**0
+ 10 .debug_ranges 00000260  00000000  00000000  00021f46  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_macro  0000f577  00000000  00000000  00022163  2**0
+ 11 .debug_macro  0000f577  00000000  00000000  000221a6  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_line   0000558f  00000000  00000000  000316da  2**0
+ 12 .debug_line   0000559f  00000000  00000000  0003171d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_str    000571ba  00000000  00000000  00036c69  2**0
+ 13 .debug_str    000571c3  00000000  00000000  00036cbc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_frame  00000ac8  00000000  00000000  0008de24  2**2
+ 14 .debug_frame  00000ad8  00000000  00000000  0008de80  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -1129,9 +1129,9 @@ debug_s.data_tx[2] = 'L';
      660:	41004400 	.word	0x41004400
 
 00000664 <ve_1_init>:
-	LED_RGB_TGL(COLOUR_GREEN);
+char motor_th(void)
+{
 	
-	return 0;
 }
 void ve_1_init(void)
 {
