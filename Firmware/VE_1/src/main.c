@@ -1,19 +1,34 @@
-/*
- * main.c
- *
- * Created: 6/26/2015 7:45:48 PM
- *  Author: Tulio
- */ 
 /**
-*	\file		VE_1.c
-*	\author		TPO
-*	\date		16/06/2015
-*	\brief		Arquivo principal.
-*	\details	Este arquivo contem a logica de funcionaento do programa principal.
-*	\copyright 	GNU V2.0
-*/
+ * \file
+ *
+ * \brief Empty user application template
+ *
+ */
 
-#include "samd20g17.h"
+/**
+ * \mainpage User Application template doxygen documentation
+ *
+ * \par Empty user application template
+ *
+ * Bare minimum empty user application template
+ *
+ * \par Content
+ *
+ * -# Include the ASF header files (through asf.h)
+ * -# Minimal main function that starts with a call to system_init()
+ * -# "Insert application code here" comment
+ *
+ */
+
+/*
+ * Include header files for all drivers that have been imported from
+ * Atmel Software Framework (ASF).
+ */
+/*
+ * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
+ */
+#include <asf.h>
+
 #include "Threads.h"
 #include "Board.h"
 #include "VE_1.h"
@@ -31,6 +46,7 @@ volatile char SERCOM5_FLAG = false;
 int main(void)
 {
     /* Initialize the SAM system */
+	system_init();
 	ve_1_init();
 		LED_RGB_SET(COLOUR_BLUE);
 		volatile int ii=0;

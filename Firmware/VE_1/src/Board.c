@@ -70,8 +70,8 @@ void motor_init(void)
 	
 	PWM_MOTOR1_TC_CONF.CTRLA.reg |= TC_CTRLA_WAVEGEN_NPWM | TC_CTRLA_MODE_COUNT8 ;
 	PWM_MOTOR1_TC_CONF.PER.reg	=	0xFF;
-	PWM_MOTOR1_TC_A_DUTY.reg	=	0x00;
-	PWM_MOTOR1_TC_B_DUTY.reg	=	0x00;
+	PWM_MOTOR1_TC_A_VAL	=	0x00;
+	PWM_MOTOR1_TC_B_VAL	=	0x00;
 		
 	PWM_MOTOR1_TC_CONF.CTRLA.reg |= TC_CTRLA_ENABLE;
 	while(TC2->COUNT8.STATUS.bit.SYNCBUSY);	
@@ -91,8 +91,11 @@ void motor_init(void)
 	PWM_MOTOR2_TC_CONF.CTRLA.reg |= TC_CTRLA_WAVEGEN_NPWM | TC_CTRLA_MODE_COUNT8 ;
 	PWM_MOTOR2_TC_CONF.PER.reg = 0xFF;
 
-	PWM_MOTOR2_TC_A_DUTY.reg = 0x00;
-	PWM_MOTOR2_TC_B_DUTY.reg = 0x9A;
+	PWM_MOTOR2_TC_A_VAL = 0x00;
+	PWM_MOTOR2_TC_B_VAL = 0x9A;
+	
+	PWM_MOTOR1_TC_A_VAL = 0x00;
+	PWM_MOTOR1_TC_B_VAL = 0xAA;
 		
 	PWM_MOTOR2_TC_CONF.CTRLA.reg |= TC_CTRLA_ENABLE;
 }
@@ -217,7 +220,7 @@ void adc_init(void)
 	//ADC->SAMPCTRL.reg = ADC_SAMPCTRL_SAMPLEN(0xFF);
 	ADC->INPUTCTRL.reg |= ADC_INPUTCTRL_MUXPOS_PIN18 | ADC_INPUTCTRL_MUXNEG_GND | ADC_INPUTCTRL_GAIN_DIV2;
 	while(ADC->STATUS.bit.SYNCBUSY){}
-	ADC->CTRLB.reg |=  ADC_CTRLB_PRESCALER_DIV256;//| ADC_CTRLB_RESSEL_16BIT;ADC_CTRLB_FREERUN
+	ADC->CTRLB.reg |=  ADC_CTRLB_PRESCALER_DIV512;//| ADC_CTRLB_RESSEL_16BIT;ADC_CTRLB_FREERUN
 	while(ADC->STATUS.bit.SYNCBUSY){}
 	ADC->CTRLA.reg |= ADC_CTRLA_ENABLE;
 	while(ADC->STATUS.bit.SYNCBUSY){}
@@ -234,9 +237,9 @@ void adc_read(void)
 	ADC->SWTRIG.bit.START = true;
 	while(!ADC->INTFLAG.bit.RESRDY){}
 	
-	valor_int = 20;
+	valor_int = ADC->RESULT.reg;
 	
-	//sprintf(valor_str ,"%0.5d" , valor_int);
+	sprintf(valor_str ,"%0.5d" , valor_int);
 	//itoa(valor_int,valor_str,10);
 	valor_str[5] ='\r';
 	valor_str[6] = '\n';
@@ -313,9 +316,9 @@ void clock_init()
 }
 void board_init()
 {
-	SystemInit();
+	//SystemInit();
 		
-	clock_init();
+	//clock_init();
 	
 	debug_init();
 	motor_init();
