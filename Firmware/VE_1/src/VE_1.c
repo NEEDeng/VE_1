@@ -30,6 +30,27 @@ char motor_th(void)
 {
 	
 }
+char motor_speed(char motor1_duty, char motor1_dir)
+{
+	
+	};
+enum MOTOR_S_FLAG {MOTOR_S_RUNNING, MOTOR_S_STOPPED, MOTOR_S_WAITING, MOTOR_S_NOT_IMPLEMENTED};
+struct _motor_s
+{
+	TC_COUNT8_CC_Type cc_reg;
+	int position_abs_turn;
+	int position_abs_degree;
+	int position_relative_turn;
+	int position_relative_degree;
+	int position_last_turn;
+	int position_last_degree;
+	unsigned int adc_current_val;
+	unsigned int adc_last_val;
+	char duty;
+	char flag;
+	unsigned int turn_table[360];
+	unsigned int turn_table_precision;	
+};
 void ve_1_init(void)
 {
 	board_init();
