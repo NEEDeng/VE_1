@@ -448,6 +448,12 @@
     <Compile Include="src\VE_1.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\watches.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\watches.c">
+      <SubType>compile</SubType>
+    </Compile>
     <None Include="src\asf.h">
       <SubType>compile</SubType>
     </None>

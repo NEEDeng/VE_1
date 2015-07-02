@@ -15,23 +15,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .comment      00000071  00000000  00000000  00010090  2**0
                   CONTENTS, READONLY
-  6 .debug_info   0000eb09  00000000  00000000  00010101  2**0
+  6 .debug_info   0000eb43  00000000  00000000  00010101  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000160b  00000000  00000000  0001ec0a  2**0
+  7 .debug_abbrev 00001645  00000000  00000000  0001ec44  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_loc    00001a21  00000000  00000000  00020215  2**0
+  8 .debug_loc    00001a42  00000000  00000000  00020289  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_aranges 00000310  00000000  00000000  00021c36  2**0
+  9 .debug_aranges 00000318  00000000  00000000  00021ccb  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000260  00000000  00000000  00021f46  2**0
+ 10 .debug_ranges 00000268  00000000  00000000  00021fe3  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_macro  0000f577  00000000  00000000  000221a6  2**0
+ 11 .debug_macro  0000f577  00000000  00000000  0002224b  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_line   0000559f  00000000  00000000  0003171d  2**0
+ 12 .debug_line   000055af  00000000  00000000  000317c2  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_str    000571c3  00000000  00000000  00036cbc  2**0
+ 13 .debug_str    000571e6  00000000  00000000  00036d71  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_frame  00000ad8  00000000  00000000  0008de80  2**2
+ 14 .debug_frame  00000ae8  00000000  00000000  0008df58  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -1129,10 +1129,10 @@ debug_s.data_tx[2] = 'L';
      660:	41004400 	.word	0x41004400
 
 00000664 <ve_1_init>:
-char motor_th(void)
-{
-	
-}
+	char flag;
+	unsigned int turn_table[360];
+	unsigned int turn_table_precision;	
+};
 void ve_1_init(void)
 {
      664:	b538      	push	{r3, r4, r5, lr}

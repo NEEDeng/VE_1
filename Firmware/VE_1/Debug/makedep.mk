@@ -8,6 +8,8 @@ src\Threads.c
 
 src\VE_1.c
 
+src\watches.c
+
 src\ASF\common2\boards\user_board\init.c
 
 src\ASF\common\utils\interrupt\interrupt_sam_nvic.c

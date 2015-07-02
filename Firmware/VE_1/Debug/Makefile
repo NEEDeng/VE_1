@@ -84,6 +84,7 @@ C_SRCS +=  \
 ../src/Board.c \
 ../src/Threads.c \
 ../src/VE_1.c \
+../src/watches.c \
 ../src/ASF/common2/boards/user_board/init.c \
 ../src/ASF/common/utils/interrupt/interrupt_sam_nvic.c \
 ../src/ASF/sam0/drivers/system/clock/clock_samd20/clock.c \
@@ -107,6 +108,7 @@ OBJS +=  \
 src/Board.o \
 src/Threads.o \
 src/VE_1.o \
+src/watches.o \
 src/ASF/common2/boards/user_board/init.o \
 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o \
 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o \
@@ -123,6 +125,7 @@ OBJS_AS_ARGS +=  \
 src/Board.o \
 src/Threads.o \
 src/VE_1.o \
+src/watches.o \
 src/ASF/common2/boards/user_board/init.o \
 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o \
 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o \
@@ -139,6 +142,7 @@ C_DEPS +=  \
 src/Board.d \
 src/Threads.d \
 src/VE_1.d \
+src/watches.d \
 src/ASF/common2/boards/user_board/init.d \
 src/ASF/common/utils/interrupt/interrupt_sam_nvic.d \
 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.d \
@@ -155,6 +159,7 @@ C_DEPS_AS_ARGS +=  \
 src/Board.d \
 src/Threads.d \
 src/VE_1.d \
+src/watches.d \
 src/ASF/common2/boards/user_board/init.d \
 src/ASF/common/utils/interrupt/interrupt_sam_nvic.d \
 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.d \
@@ -178,6 +183,8 @@ OUTPUT_FILE_DEP:= ./makedep.mk
 LIB_DEP+= 
 
 # AVR32/GNU C Compiler
+
+
 
 
 
