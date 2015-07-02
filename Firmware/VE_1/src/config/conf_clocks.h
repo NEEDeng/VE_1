@@ -59,10 +59,10 @@
 /* SYSTEM_CLOCK_SOURCE_OSC8M configuration - Internal 8MHz oscillator */
 #  define CONF_CLOCK_OSC8M_PRESCALER              SYSTEM_OSC8M_DIV_1
 #  define CONF_CLOCK_OSC8M_ON_DEMAND              true
-#  define CONF_CLOCK_OSC8M_RUN_IN_STANDBY         false
+#  define CONF_CLOCK_OSC8M_RUN_IN_STANDBY         true
 
 /* SYSTEM_CLOCK_SOURCE_XOSC configuration - External clock/oscillator */
-#  define CONF_CLOCK_XOSC_ENABLE                  true
+#  define CONF_CLOCK_XOSC_ENABLE                  false
 #  define CONF_CLOCK_XOSC_EXTERNAL_CRYSTAL        SYSTEM_CLOCK_EXTERNAL_CRYSTAL
 #  define CONF_CLOCK_XOSC_EXTERNAL_FREQUENCY      16000000UL
 #  define CONF_CLOCK_XOSC_STARTUP_TIME            SYSTEM_XOSC_STARTUP_32768
@@ -98,7 +98,7 @@
 
 /* DFLL closed loop mode configuration */
 #  define CONF_CLOCK_DFLL_SOURCE_GCLK_GENERATOR   GCLK_GENERATOR_1
-#  define CONF_CLOCK_DFLL_MULTIPLY_FACTOR         (48000000 / 16000000UL)
+#  define CONF_CLOCK_DFLL_MULTIPLY_FACTOR         (48000000 / 8000000UL)
 #  define CONF_CLOCK_DFLL_QUICK_LOCK              true
 #  define CONF_CLOCK_DFLL_TRACK_AFTER_FINE_LOCK   true
 #  define CONF_CLOCK_DFLL_KEEP_LOCK_ON_WAKEUP     true
@@ -118,18 +118,18 @@
 #  define CONF_CLOCK_GCLK_0_PRESCALER             0
 #  define CONF_CLOCK_GCLK_0_OUTPUT_ENABLE         false
 
-/* Configure GCLK generator 1 */
+/* Configure GCLK generator 1 (OSC8M)*/
 #  define CONF_CLOCK_GCLK_1_ENABLE                true
 #  define CONF_CLOCK_GCLK_1_RUN_IN_STANDBY        false
-#  define CONF_CLOCK_GCLK_1_CLOCK_SOURCE          SYSTEM_CLOCK_SOURCE_XOSC
+#  define CONF_CLOCK_GCLK_1_CLOCK_SOURCE          SYSTEM_CLOCK_SOURCE_OSC8M
 #  define CONF_CLOCK_GCLK_1_PRESCALER             0
 #  define CONF_CLOCK_GCLK_1_OUTPUT_ENABLE         false
 
-/* Configure GCLK generator 2 (RTC) */
+/* Configure GCLK generator 2 (OSC8M/128) */ 
 #  define CONF_CLOCK_GCLK_2_ENABLE                true
 #  define CONF_CLOCK_GCLK_2_RUN_IN_STANDBY        false
 #  define CONF_CLOCK_GCLK_2_CLOCK_SOURCE          SYSTEM_CLOCK_SOURCE_OSC8M
-#  define CONF_CLOCK_GCLK_2_PRESCALER             0
+#  define CONF_CLOCK_GCLK_2_PRESCALER             SYSTEM_MAIN_CLOCK_DIV_128
 #  define CONF_CLOCK_GCLK_2_OUTPUT_ENABLE         false
 
 /* Configure GCLK generator 3 */
