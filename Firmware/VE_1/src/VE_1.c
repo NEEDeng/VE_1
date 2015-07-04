@@ -26,7 +26,7 @@ char fn2(void)
 		watches_set_cronos(0);
 				toggle ++;
 	}
-	else
+	else 
 	{
 		toggle ++;
 		if(toggle>2000)
