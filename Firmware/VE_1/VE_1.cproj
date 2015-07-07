@@ -436,6 +436,12 @@
     <Compile Include="src\Board.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\motor.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\motor.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\Threads.c">
       <SubType>compile</SubType>
     </Compile>

@@ -4,6 +4,8 @@
 
 src\Board.c
 
+src\motor.c
+
 src\Threads.c
 
 src\VE_1.c
