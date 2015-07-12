@@ -59,7 +59,7 @@
 #define LED_RGB_SET(COLOUR)		LED_RGB_PORT_CONF.OUTCLR.reg = COLOUR
 #define LED_RGB_TGL(COLOUR)		LED_RGB_PORT_CONF.OUTTGL.reg = COLOUR
 #define LED_RGB_CLR(COLOUR)		LED_RGB_PORT_CONF.OUTSET.reg = COLOUR
-#define LED_RGB_CLR_ALL()			LED_RGB_PORT_CONF.OUTSET.reg = COLOUR_RED | LED_RGB_BLUE_PORT | LED_RGB_GREEN_PORT
+#define LED_RGB_CLR_ALL()			LED_RGB_PORT_CONF.OUTSET.reg = LED_RGB_RED_PORT | LED_RGB_BLUE_PORT | LED_RGB_GREEN_PORT
 
 #define THREAD_CLK_FREQUENCY	8000000
 #define THREAD_PRESCALER		1
@@ -69,17 +69,28 @@
 #define THREAD_COUNT_CONF		TC0->COUNT16
 #define THREAD_INTERRUPT_CLEAR()	THREAD_COUNT_CONF.INTFLAG.reg |= TC_INTFLAG_OVF //clear interrupt
 
+
+#define TIMER_CLK_FREQUENCY	8000000
+#define TIMER_PRESCALER		1
+#define TIMER_FREQUENCY		1000
+#define TIMER_FREQUENCY_OFF	0
+#define TIMER_TOP_VAL			((TIMER_CLK_FREQUENCY)/(TIMER_PRESCALER*TIMER_FREQUENCY)-1+TIMER_FREQUENCY_OFF)
+#define TIMER_COUNT_CONF		TC1->COUNT16
+#define TIMER_INTERRUPT_CLEAR()	TIMER_COUNT_CONF.INTFLAG.reg |= TC_INTFLAG_OVF //clear interrupt
+
 void thread_init(void);
+void thread_timer(void);
 void led_init(void);
-void motor_init(void);
 char debug_send_byte( char data);
 char debug_send_data( char *data,  int size);
 void  debug_init(void);
 void adc_init(void);
-void adc_read( void);
+uint16_t adc_read( void);
 void board_init(void);
 void adc_test(void);
 char debug_send_byte_hand();
+char debug_send_data_handler(int size);
+void dummy_delay_ms(uint16_t ms);
 enum DEBUG_S_FLAG {DEBUG_S_SENDING, DEBUG_S_IDLE, DEBUG_S_RECEIVING};
 struct _debug_s
 {

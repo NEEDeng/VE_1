@@ -43,16 +43,49 @@ void thread_init(void)
 	
 	THREAD_COUNT_CONF.CTRLA.reg	=	TC_CTRLA_ENABLE | TC_CTRLA_WAVEGEN_MFRQ   | TC_CTRLA_RUNSTDBY ;//| TC_CTRLA_PRESCALER_DIV2; //enable timmer
 	while(THREAD_COUNT_CONF.STATUS.bit.SYNCBUSY){}
+		NVIC_SetPriority(TC0_IRQn,2);
 		NVIC_EnableIRQ(TC0_IRQn);
 }
-
+#define F_CLK 48000000UL
+void dummy_delay_ms(uint16_t ms)
+{
+	volatile int i=0;
+	volatile int k=0;
+	for(k=0;k<ms;k++)
+	{
+		for(i=0;i<48000;i++)
+		{}
+	}
+}
+void timer_init(void)
+{
+	PM->APBCMASK.reg			|=	PM_APBCMASK_TC1; //enable clock to timer 0
+	
+	GCLK->CLKCTRL.reg		=	GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_ID_TC0_TC1 | GCLK_CLKCTRL_GEN_GCLK1;
+	while(GCLK->STATUS.bit.SYNCBUSY){}
+	
+	
+	TIMER_COUNT_CONF.CC[0].reg		=	TIMER_TOP_VAL;
+	while(TIMER_COUNT_CONF.STATUS.bit.SYNCBUSY){}
+	TIMER_COUNT_CONF.EVCTRL.reg		|=	TC_EVCTRL_OVFEO;
+	
+	
+	
+	TIMER_COUNT_CONF.INTENSET.reg	|=	TC_INTENSET_OVF; //enable overflow interrupt
+	TC0->COUNT16.INTFLAG.reg = 0xFF;
+	NVIC_EnableIRQ(TC0_IRQn);
+	
+	TIMER_COUNT_CONF.CTRLA.reg	=	TC_CTRLA_ENABLE | TC_CTRLA_WAVEGEN_MFRQ   | TC_CTRLA_RUNSTDBY ;//| TC_CTRLA_PRESCALER_DIV2; //enable timmer
+	while(TIMER_COUNT_CONF.STATUS.bit.SYNCBUSY){}
+	NVIC_EnableIRQ(TC1_IRQn);
+}
 void led_init(void)
 {
 	LED_RGB_PORT_CONF.DIRSET.reg		= LED_RGB_RED_PORT | LED_RGB_BLUE_PORT | LED_RGB_GREEN_PORT;
 	LED_RGB_CLR_ALL();
 }
 
-void motor_init(void)
+ void motor_pwm_init(void)
 {
 	
 	GCLK->CLKCTRL.reg			=	GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_ID_TC2_TC3 | GCLK_CLKCTRL_GEN_GCLK1;
@@ -91,11 +124,11 @@ void motor_init(void)
 	PWM_MOTOR2_TC_CONF.CTRLA.reg |= TC_CTRLA_WAVEGEN_NPWM | TC_CTRLA_MODE_COUNT8 ;
 	PWM_MOTOR2_TC_CONF.PER.reg = 0xFF;
 
-	PWM_MOTOR2_TC_A_VAL = 0x00;
+/*	PWM_MOTOR2_TC_A_VAL = 0x00;
 	PWM_MOTOR2_TC_B_VAL = 0x9A;
 	
 	PWM_MOTOR1_TC_A_VAL = 0x00;
-	PWM_MOTOR1_TC_B_VAL = 0xAA;
+	PWM_MOTOR1_TC_B_VAL = 0xAA;*/
 		
 	PWM_MOTOR2_TC_CONF.CTRLA.reg |= TC_CTRLA_ENABLE;
 }
@@ -141,8 +174,10 @@ char debug_send_data_handler(int size)
 		debug_s.size_sended = 0;
 		debug_s.flag = DEBUG_S_SENDING;
 		debug_send_byte_hand();
+		return 0;
 	}
-	return 0;
+	return -1;
+	
 }
 
 
@@ -229,10 +264,10 @@ void adc_init(void)
 }
 
 
-void adc_read(void)
+uint16_t adc_read(void)
 {
-	static unsigned char valor_str[7];
-	static unsigned int valor_int=0;
+	static uint8_t valor_str[7];
+	static uint16_t valor_int=0;
 	
 	ADC->SWTRIG.bit.START = true;
 	while(!ADC->INTFLAG.bit.RESRDY){}
@@ -248,7 +283,8 @@ void adc_read(void)
 		debug_s.data_tx[i] = valor_str[i];
 	}
 	ADC->INTFLAG.reg = ADC_INTFLAG_RESRDY;
-	debug_send_data_handler(7);
+	//debug_send_data_handler(7);
+	return valor_int;
 }
 
 void clock_init()
@@ -321,7 +357,7 @@ void board_init()
 	//clock_init();
 	
 	debug_init();
-//	motor_init();
+	motor_pwm_init();
 	led_init();
 	
 	thread_init();
