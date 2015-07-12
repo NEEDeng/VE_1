@@ -35,4 +35,7 @@ struct _motor_s
 
 char motor_set_duty(enum MOTOR_SIDE_FLAG motor, uint8_t duty, enum MOTOR_DIRECTION_FLAG dir);
 char motor_init(void);
+char motor_find_min_max(void);
+char motor_fn(void);
+char motor_run(void);
 #endif /* MOTOR_H_ */
