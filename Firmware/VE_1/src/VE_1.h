@@ -11,6 +11,8 @@
 
 
 void ve_1_init(void);
-
+char fn1(void);
+char fn2(void);
+char fn3(void);
 
 #endif /* VE_1_H_ */

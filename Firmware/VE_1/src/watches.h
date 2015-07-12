@@ -14,8 +14,8 @@
 /**
 	@var counter_current Contador contendo o valor atual do 
 */
-typedef enum WATCH_CRONOS_FLAG {WATCH_CRONOS_IDLE, WATCH_CRONOS_COUNTING, WATCH_CRONOS_PAUSED, WATCH_CRONOS_FINISHED, WATCH_CRONOS_RESETED};
-typedef enum WATCH_ALARM_FLAG {WATCH_ALARM_IDLE, WATCH_ALARM_COUNTING, WATCH_ALARM_PAUSED, WATCH_ALARM_FINISHED, WATCH_ALARM_RESETED};
+ enum WATCH_CRONOS_FLAG {WATCH_CRONOS_IDLE=0, WATCH_CRONOS_COUNTING, WATCH_CRONOS_PAUSED, WATCH_CRONOS_FINISHED, WATCH_CRONOS_RESETED};
+ enum WATCH_ALARM_FLAG {WATCH_ALARM_IDLE=0, WATCH_ALARM_COUNTING, WATCH_ALARM_PAUSED, WATCH_ALARM_FINISHED, WATCH_ALARM_RESETED};
 #define WATCH_CRONOS_N	3	
 #define WATCH_ALARM_N	3
 #define WATCH_CLOCK_SRC_FREQ	100000
@@ -42,14 +42,16 @@ struct _watch_alarm_s
 	uint32_t referencia;	/**< Valor de comparacao do alarme.*/
 }watch_alarm_s[WATCH_ALARM_N];
 
-void watches_init();
+void watches_init(void);
 char watches_set_cronos(int n);
 char watches_get_cronos_counter(int n, uint32_t *val);
 char watches_get_cronos_ms(int n, uint16_t *val);
 char watches_set_cronos_flag(int n, int flag);
-char watches_set_alarm_counter(int n, uint32_t referencia);
-char watches_get_alarm_flag(int n, int *flag);
-char watches_set_alarm_flag(int n, int flag);
-char watches_run();
-
+char watches_set_alarm(int n, uint32_t referencia);
+char watches_get_alarm_flag(int n, enum WATCH_ALARM_FLAG *flag);
+char wathces_is_alarm_finished(int n);
+char watches_set_alarm_flag(int n, enum WATCH_ALARM_FLAG flag);
+char watches_run(void);
+char watches_set_alarm_ms(int n, uint32_t ms);
+char watches_set_alarm_hz(int n, float hz);
 #endif /* WATCHES_H_ */
