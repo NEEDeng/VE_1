@@ -2590,7 +2590,6 @@ Discarded input sections
  .group         0x00000000        0x8 src/main.o
  .group         0x00000000        0x8 src/main.o
  .group         0x00000000        0x8 src/main.o
- .group         0x00000000        0x8 src/main.o
  .text          0x00000000        0x0 src/main.o
  .data          0x00000000        0x0 src/main.o
  .bss           0x00000000        0x0 src/main.o
@@ -2687,7 +2686,6 @@ Discarded input sections
  .debug_macro   0x00000000       0x2e src/main.o
  .debug_macro   0x00000000       0x16 src/main.o
  .debug_macro   0x00000000       0x10 src/main.o
- .debug_macro   0x00000000       0x40 src/main.o
  .data          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/arm gcc/native/4.8.1429/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/4.8.3/armv6-m\libgcc.a(_udivsi3.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/arm gcc/native/4.8.1429/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/4.8.3/armv6-m\libgcc.a(_udivsi3.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/atmel toolchain/arm gcc/native/4.8.1429/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/4.8.3/armv6-m\libgcc.a(_dvmd_tls.o)
@@ -2980,127 +2978,127 @@ LOAD c:/program files (x86)/atmel/atmel toolchain/arm gcc/native/4.8.1429/arm-gn
  .text.threads_run
                 0x00000894       0x2c src/Threads.o
                 0x00000894                threads_run
- .text.fn1      0x000008c0        0x4 src/VE_1.o
-                0x000008c0                fn1
- .text.fn3      0x000008c4        0x4 src/VE_1.o
-                0x000008c4                fn3
- .text.fn2      0x000008c8       0x10 src/VE_1.o
-                0x000008c8                fn2
+ .text.fn3      0x000008c0        0x4 src/VE_1.o
+                0x000008c0                fn3
+ .text.fn1      0x000008c4       0x10 src/VE_1.o
+                0x000008c4                fn1
+ .text.fn2      0x000008d4       0x10 src/VE_1.o
+                0x000008d4                fn2
  .text.ve_1_init
-                0x000008d8       0x64 src/VE_1.o
-                0x000008d8                ve_1_init
+                0x000008e4       0x64 src/VE_1.o
+                0x000008e4                ve_1_init
  .text.watches_init
-                0x0000093c       0x1c src/watches.o
-                0x0000093c                watches_init
+                0x00000948       0x1c src/watches.o
+                0x00000948                watches_init
  .text.watches_set_cronos
-                0x00000958       0x2c src/watches.o
-                0x00000958                watches_set_cronos
+                0x00000964       0x2c src/watches.o
+                0x00000964                watches_set_cronos
  .text.watches_get_cronos_counter
-                0x00000984       0x30 src/watches.o
-                0x00000984                watches_get_cronos_counter
+                0x00000990       0x30 src/watches.o
+                0x00000990                watches_get_cronos_counter
  .text.watches_get_cronos_ms
-                0x000009b4       0x30 src/watches.o
-                0x000009b4                watches_get_cronos_ms
+                0x000009c0       0x30 src/watches.o
+                0x000009c0                watches_get_cronos_ms
  .text.watches_cronos_finish
-                0x000009e4       0x18 src/watches.o
-                0x000009e4                watches_cronos_finish
+                0x000009f0       0x18 src/watches.o
+                0x000009f0                watches_cronos_finish
  .text.watches_set_alarm
-                0x000009fc       0x3c src/watches.o
-                0x000009fc                watches_set_alarm
+                0x00000a08       0x3c src/watches.o
+                0x00000a08                watches_set_alarm
  .text.watches_set_alarm_hz
-                0x00000a38       0x28 src/watches.o
-                0x00000a38                watches_set_alarm_hz
+                0x00000a44       0x28 src/watches.o
+                0x00000a44                watches_set_alarm_hz
  .text.wathces_is_alarm_finished
-                0x00000a60       0x18 src/watches.o
-                0x00000a60                wathces_is_alarm_finished
+                0x00000a6c       0x18 src/watches.o
+                0x00000a6c                wathces_is_alarm_finished
  .text.watches_run
-                0x00000a78       0x48 src/watches.o
-                0x00000a78                watches_run
+                0x00000a84       0x48 src/watches.o
+                0x00000a84                watches_run
  .text.system_board_init
-                0x00000ac0        0x4 src/ASF/common2/boards/user_board/init.o
-                0x00000ac0                system_board_init
+                0x00000acc        0x4 src/ASF/common2/boards/user_board/init.o
+                0x00000acc                system_board_init
  .text.cpu_irq_enter_critical
-                0x00000ac4       0x40 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
-                0x00000ac4                cpu_irq_enter_critical
+                0x00000ad0       0x40 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
+                0x00000ad0                cpu_irq_enter_critical
  .text.cpu_irq_leave_critical
-                0x00000b04       0x30 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
-                0x00000b04                cpu_irq_leave_critical
+                0x00000b10       0x30 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
+                0x00000b10                cpu_irq_leave_critical
  .text.system_clock_source_osc8m_set_config
-                0x00000b34       0x3c src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
-                0x00000b34                system_clock_source_osc8m_set_config
+                0x00000b40       0x3c src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
+                0x00000b40                system_clock_source_osc8m_set_config
  .text.system_clock_source_dfll_set_config
-                0x00000b70       0xa4 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
-                0x00000b70                system_clock_source_dfll_set_config
+                0x00000b7c       0xa4 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
+                0x00000b7c                system_clock_source_dfll_set_config
  .text.system_clock_source_enable
-                0x00000c14       0x94 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
-                0x00000c14                system_clock_source_enable
+                0x00000c20       0x94 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
+                0x00000c20                system_clock_source_enable
  .text.system_clock_init
-                0x00000ca8      0x168 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
-                0x00000ca8                system_clock_init
+                0x00000cb4      0x168 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
+                0x00000cb4                system_clock_init
  .text.system_gclk_init
-                0x00000e10       0x24 src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
-                0x00000e10                system_gclk_init
+                0x00000e1c       0x24 src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
+                0x00000e1c                system_gclk_init
  .text.system_gclk_gen_set_config
-                0x00000e34       0xb0 src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
-                0x00000e34                system_gclk_gen_set_config
+                0x00000e40       0xb0 src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
+                0x00000e40                system_gclk_gen_set_config
  .text.system_gclk_gen_enable
-                0x00000ee4       0x40 src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
-                0x00000ee4                system_gclk_gen_enable
+                0x00000ef0       0x40 src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
+                0x00000ef0                system_gclk_gen_enable
  .text.system_gclk_chan_enable
-                0x00000f24       0x30 src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
-                0x00000f24                system_gclk_chan_enable
+                0x00000f30       0x30 src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
+                0x00000f30                system_gclk_chan_enable
  .text.system_gclk_chan_disable
-                0x00000f54       0x60 src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
-                0x00000f54                system_gclk_chan_disable
+                0x00000f60       0x60 src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
+                0x00000f60                system_gclk_chan_disable
  .text.system_gclk_chan_set_config
-                0x00000fb4       0x1c src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
-                0x00000fb4                system_gclk_chan_set_config
+                0x00000fc0       0x1c src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
+                0x00000fc0                system_gclk_chan_set_config
  .text._system_dummy_init
-                0x00000fd0        0x4 src/ASF/sam0/drivers/system/system.o
-                0x00000fd0                _system_events_init
-                0x00000fd0                _system_dummy_init
-                0x00000fd0                _system_extint_init
+                0x00000fdc        0x4 src/ASF/sam0/drivers/system/system.o
+                0x00000fdc                _system_events_init
+                0x00000fdc                _system_dummy_init
+                0x00000fdc                _system_extint_init
  .text.system_init
-                0x00000fd4       0x24 src/ASF/sam0/drivers/system/system.o
-                0x00000fd4                system_init
+                0x00000fe0       0x24 src/ASF/sam0/drivers/system/system.o
+                0x00000fe0                system_init
  .text.Dummy_Handler
-                0x00000ff8        0x4 src/ASF/sam0/utils/cmsis/samd20/source/gcc/startup_samd20.o
-                0x00000ff8                HardFault_Handler
-                0x00000ff8                TC2_Handler
-                0x00000ff8                AC_Handler
-                0x00000ff8                SysTick_Handler
-                0x00000ff8                PendSV_Handler
-                0x00000ff8                NMI_Handler
-                0x00000ff8                SERCOM1_Handler
-                0x00000ff8                SERCOM2_Handler
-                0x00000ff8                RTC_Handler
-                0x00000ff8                EIC_Handler
-                0x00000ff8                WDT_Handler
-                0x00000ff8                TC4_Handler
-                0x00000ff8                TC1_Handler
-                0x00000ff8                TC3_Handler
-                0x00000ff8                Dummy_Handler
-                0x00000ff8                PM_Handler
-                0x00000ff8                SVC_Handler
-                0x00000ff8                EVSYS_Handler
-                0x00000ff8                SERCOM3_Handler
-                0x00000ff8                SERCOM4_Handler
-                0x00000ff8                NVMCTRL_Handler
-                0x00000ff8                SERCOM0_Handler
-                0x00000ff8                DAC_Handler
-                0x00000ff8                PTC_Handler
-                0x00000ff8                TC5_Handler
-                0x00000ff8                SYSCTRL_Handler
+                0x00001004        0x4 src/ASF/sam0/utils/cmsis/samd20/source/gcc/startup_samd20.o
+                0x00001004                HardFault_Handler
+                0x00001004                TC2_Handler
+                0x00001004                AC_Handler
+                0x00001004                SysTick_Handler
+                0x00001004                PendSV_Handler
+                0x00001004                NMI_Handler
+                0x00001004                SERCOM1_Handler
+                0x00001004                SERCOM2_Handler
+                0x00001004                RTC_Handler
+                0x00001004                EIC_Handler
+                0x00001004                WDT_Handler
+                0x00001004                TC4_Handler
+                0x00001004                TC1_Handler
+                0x00001004                TC3_Handler
+                0x00001004                Dummy_Handler
+                0x00001004                PM_Handler
+                0x00001004                SVC_Handler
+                0x00001004                EVSYS_Handler
+                0x00001004                SERCOM3_Handler
+                0x00001004                SERCOM4_Handler
+                0x00001004                NVMCTRL_Handler
+                0x00001004                SERCOM0_Handler
+                0x00001004                DAC_Handler
+                0x00001004                PTC_Handler
+                0x00001004                TC5_Handler
+                0x00001004                SYSCTRL_Handler
  .text.Reset_Handler
-                0x00000ffc       0xa0 src/ASF/sam0/utils/cmsis/samd20/source/gcc/startup_samd20.o
-                0x00000ffc                Reset_Handler
- .text._sbrk    0x0000109c       0x24 src/ASF/sam0/utils/syscalls/gcc/syscalls.o
-                0x0000109c                _sbrk
- .text.main     0x000010c0       0x70 src/main.o
-                0x000010c0                main
+                0x00001008       0xa0 src/ASF/sam0/utils/cmsis/samd20/source/gcc/startup_samd20.o
+                0x00001008                Reset_Handler
+ .text._sbrk    0x000010a8       0x24 src/ASF/sam0/utils/syscalls/gcc/syscalls.o
+                0x000010a8                _sbrk
+ .text.main     0x000010cc       0x70 src/main.o
+                0x000010cc                main
  .text.TC0_Handler
-                0x00001130       0x20 src/main.o
-                0x00001130                TC0_Handler
+                0x0000113c       0x14 src/main.o
+                0x0000113c                TC0_Handler
  .text.SERCOM5_Handler
                 0x00001150       0x18 src/main.o
                 0x00001150                SERCOM5_Handler
@@ -3490,21 +3488,21 @@ OUTPUT(VE_1.elf elf32-littlearm)
  .comment       0x00000000       0x72 src/main.o
  .comment       0x00000000       0x72 c:/program files (x86)/atmel/atmel toolchain/arm gcc/native/4.8.1429/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/4.8.3/armv6-m/crtend.o
 
-.debug_info     0x00000000    0x114ab
+.debug_info     0x00000000    0x11407
  .debug_info    0x00000000     0x5a67 src/Board.o
  .debug_info    0x00005a67     0x1920 src/motor.o
  .debug_info    0x00007387      0x13a src/sensors.o
  .debug_info    0x000074c1      0x1fd src/Threads.o
- .debug_info    0x000076be      0xaa0 src/VE_1.o
- .debug_info    0x0000815e      0x6c6 src/watches.o
- .debug_info    0x00008824      0x184 src/ASF/common2/boards/user_board/init.o
- .debug_info    0x000089a8      0x1e1 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
- .debug_info    0x00008b89     0x34b9 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
- .debug_info    0x0000c042     0x1423 src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
- .debug_info    0x0000d465      0x164 src/ASF/sam0/drivers/system/system.o
- .debug_info    0x0000d5c9      0x972 src/ASF/sam0/utils/cmsis/samd20/source/gcc/startup_samd20.o
- .debug_info    0x0000df3b      0x427 src/ASF/sam0/utils/syscalls/gcc/syscalls.o
- .debug_info    0x0000e362     0x3149 src/main.o
+ .debug_info    0x000076be      0xaab src/VE_1.o
+ .debug_info    0x00008169      0x6c6 src/watches.o
+ .debug_info    0x0000882f      0x184 src/ASF/common2/boards/user_board/init.o
+ .debug_info    0x000089b3      0x1e1 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
+ .debug_info    0x00008b94     0x34b9 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
+ .debug_info    0x0000c04d     0x1423 src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
+ .debug_info    0x0000d470      0x164 src/ASF/sam0/drivers/system/system.o
+ .debug_info    0x0000d5d4      0x972 src/ASF/sam0/utils/cmsis/samd20/source/gcc/startup_samd20.o
+ .debug_info    0x0000df46      0x427 src/ASF/sam0/utils/syscalls/gcc/syscalls.o
+ .debug_info    0x0000e36d     0x309a src/main.o
 
 .debug_abbrev   0x00000000     0x1c19
  .debug_abbrev  0x00000000      0x3d1 src/Board.o
@@ -3527,15 +3525,15 @@ OUTPUT(VE_1.elf elf32-littlearm)
  .debug_loc     0x00000273      0x188 src/motor.o
  .debug_loc     0x000003fb       0x20 src/sensors.o
  .debug_loc     0x0000041b      0x108 src/Threads.o
- .debug_loc     0x00000523       0x40 src/VE_1.o
- .debug_loc     0x00000563      0x53f src/watches.o
- .debug_loc     0x00000aa2       0x1e src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
- .debug_loc     0x00000ac0     0x109c src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
- .debug_loc     0x00001b5c      0x48e src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
- .debug_loc     0x00001fea       0x20 src/ASF/sam0/drivers/system/system.o
- .debug_loc     0x0000200a       0x7c src/ASF/sam0/utils/cmsis/samd20/source/gcc/startup_samd20.o
- .debug_loc     0x00002086      0x112 src/ASF/sam0/utils/syscalls/gcc/syscalls.o
- .debug_loc     0x00002198       0x6c src/main.o
+ .debug_loc     0x00000523       0x60 src/VE_1.o
+ .debug_loc     0x00000583      0x53f src/watches.o
+ .debug_loc     0x00000ac2       0x1e src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
+ .debug_loc     0x00000ae0     0x109c src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
+ .debug_loc     0x00001b7c      0x48e src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
+ .debug_loc     0x0000200a       0x20 src/ASF/sam0/drivers/system/system.o
+ .debug_loc     0x0000202a       0x7c src/ASF/sam0/utils/cmsis/samd20/source/gcc/startup_samd20.o
+ .debug_loc     0x000020a6      0x112 src/ASF/sam0/utils/syscalls/gcc/syscalls.o
+ .debug_loc     0x000021b8       0x4c src/main.o
 
 .debug_aranges  0x00000000      0x418
  .debug_aranges
@@ -3583,7 +3581,7 @@ OUTPUT(VE_1.elf elf32-littlearm)
  .debug_ranges  0x000002c0       0x50 src/ASF/sam0/utils/syscalls/gcc/syscalls.o
  .debug_ranges  0x00000310       0x28 src/main.o
 
-.debug_macro    0x00000000    0x10188
+.debug_macro    0x00000000    0x1017f
  .debug_macro   0x00000000      0x387 src/Board.o
  .debug_macro   0x00000387      0x826 src/Board.o
  .debug_macro   0x00000bad      0x166 src/Board.o
@@ -3701,23 +3699,23 @@ OUTPUT(VE_1.elf elf32-littlearm)
  .debug_macro   0x0000fb67       0x10 src/ASF/sam0/utils/syscalls/gcc/syscalls.o
  .debug_macro   0x0000fb77       0x40 src/ASF/sam0/utils/syscalls/gcc/syscalls.o
  .debug_macro   0x0000fbb7      0x120 src/ASF/sam0/utils/syscalls/gcc/syscalls.o
- .debug_macro   0x0000fcd7      0x4b1 src/main.o
+ .debug_macro   0x0000fcd7      0x4a8 src/main.o
 
-.debug_line     0x00000000     0x6cb7
+.debug_line     0x00000000     0x6caa
  .debug_line    0x00000000      0x95b src/Board.o
  .debug_line    0x0000095b      0x84c src/motor.o
  .debug_line    0x000011a7      0x65a src/sensors.o
  .debug_line    0x00001801       0x9f src/Threads.o
- .debug_line    0x000018a0      0x6a5 src/VE_1.o
- .debug_line    0x00001f45      0x7bb src/watches.o
- .debug_line    0x00002700      0x9ed src/ASF/common2/boards/user_board/init.o
- .debug_line    0x000030ed      0x7e4 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
- .debug_line    0x000038d1      0xb63 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
- .debug_line    0x00004434      0xb83 src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
- .debug_line    0x00004fb7      0x8f7 src/ASF/sam0/drivers/system/system.o
- .debug_line    0x000058ae      0x5f9 src/ASF/sam0/utils/cmsis/samd20/source/gcc/startup_samd20.o
- .debug_line    0x00005ea7      0x39d src/ASF/sam0/utils/syscalls/gcc/syscalls.o
- .debug_line    0x00006244      0xa73 src/main.o
+ .debug_line    0x000018a0      0x6a6 src/VE_1.o
+ .debug_line    0x00001f46      0x7bb src/watches.o
+ .debug_line    0x00002701      0x9ed src/ASF/common2/boards/user_board/init.o
+ .debug_line    0x000030ee      0x7e4 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
+ .debug_line    0x000038d2      0xb63 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
+ .debug_line    0x00004435      0xb83 src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
+ .debug_line    0x00004fb8      0x8f7 src/ASF/sam0/drivers/system/system.o
+ .debug_line    0x000058af      0x5f9 src/ASF/sam0/utils/cmsis/samd20/source/gcc/startup_samd20.o
+ .debug_line    0x00005ea8      0x39d src/ASF/sam0/utils/syscalls/gcc/syscalls.o
+ .debug_line    0x00006245      0xa65 src/main.o
 
 .debug_str      0x00000000    0x579ee
  .debug_str     0x00000000    0x43551 src/Board.o
@@ -3747,23 +3745,23 @@ OUTPUT(VE_1.elf elf32-littlearm)
  .debug_str     0x0005725a      0x74d src/ASF/sam0/utils/syscalls/gcc/syscalls.o
                                0x4db0 (size before relaxing)
  .debug_str     0x000579a7       0x47 src/main.o
-                              0x53588 (size before relaxing)
+                              0x533c8 (size before relaxing)
 
 .debug_frame    0x00000000      0xf5c
  .debug_frame   0x00000000      0x150 src/Board.o
  .debug_frame   0x00000150       0x94 src/motor.o
  .debug_frame   0x000001e4       0x28 src/sensors.o
  .debug_frame   0x0000020c       0x78 src/Threads.o
- .debug_frame   0x00000284       0x60 src/VE_1.o
- .debug_frame   0x000002e4      0x144 src/watches.o
- .debug_frame   0x00000428       0x20 src/ASF/common2/boards/user_board/init.o
- .debug_frame   0x00000448       0x30 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
- .debug_frame   0x00000478      0x140 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
- .debug_frame   0x000005b8      0x14c src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
- .debug_frame   0x00000704       0x38 src/ASF/sam0/drivers/system/system.o
- .debug_frame   0x0000073c       0x38 src/ASF/sam0/utils/cmsis/samd20/source/gcc/startup_samd20.o
- .debug_frame   0x00000774       0xa8 src/ASF/sam0/utils/syscalls/gcc/syscalls.o
- .debug_frame   0x0000081c       0x70 src/main.o
+ .debug_frame   0x00000284       0x68 src/VE_1.o
+ .debug_frame   0x000002ec      0x144 src/watches.o
+ .debug_frame   0x00000430       0x20 src/ASF/common2/boards/user_board/init.o
+ .debug_frame   0x00000450       0x30 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o
+ .debug_frame   0x00000480      0x140 src/ASF/sam0/drivers/system/clock/clock_samd20/clock.o
+ .debug_frame   0x000005c0      0x14c src/ASF/sam0/drivers/system/clock/clock_samd20/gclk.o
+ .debug_frame   0x0000070c       0x38 src/ASF/sam0/drivers/system/system.o
+ .debug_frame   0x00000744       0x38 src/ASF/sam0/utils/cmsis/samd20/source/gcc/startup_samd20.o
+ .debug_frame   0x0000077c       0xa8 src/ASF/sam0/utils/syscalls/gcc/syscalls.o
+ .debug_frame   0x00000824       0x68 src/main.o
  .debug_frame   0x0000088c       0x20 c:/program files (x86)/atmel/atmel toolchain/arm gcc/native/4.8.1429/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/4.8.3/armv6-m\libgcc.a(_udivsi3.o)
  .debug_frame   0x000008ac       0x28 c:/program files (x86)/atmel/atmel toolchain/arm gcc/native/4.8.1429/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/4.8.3/armv6-m\libgcc.a(_fixunssfsi.o)
  .debug_frame   0x000008d4       0x3c c:/program files (x86)/atmel/atmel toolchain/arm gcc/native/4.8.1429/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/4.8.3/armv6-m\libgcc.a(divsf3.o)
@@ -4232,12 +4230,10 @@ ve_1_init                                         src/VE_1.o
                                                   src/main.o
 vfiprintf                                         c:/program files (x86)/atmel/atmel toolchain/arm gcc/native/4.8.1429/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv6-m\libc_s.a(lib_a-vfprintf.o)
 vfprintf                                          c:/program files (x86)/atmel/atmel toolchain/arm gcc/native/4.8.1429/arm-gnu-toolchain/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv6-m\libc_s.a(lib_a-vfprintf.o)
-watch_alarm_s                                     src/main.o
-                                                  src/watches.o
+watch_alarm_s                                     src/watches.o
                                                   src/VE_1.o
                                                   src/motor.o
-watch_crono_s                                     src/main.o
-                                                  src/watches.o
+watch_crono_s                                     src/watches.o
                                                   src/VE_1.o
                                                   src/motor.o
 watches_cronos_finish                             src/watches.o
@@ -4250,7 +4246,7 @@ watches_get_cronos_ms                             src/watches.o
 watches_init                                      src/watches.o
                                                   src/VE_1.o
 watches_run                                       src/watches.o
-                                                  src/main.o
+                                                  src/VE_1.o
 watches_set_alarm                                 src/watches.o
 watches_set_alarm_10us                            src/watches.o
 watches_set_alarm_flag                            src/watches.o
