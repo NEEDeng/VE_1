@@ -33,7 +33,7 @@ void ve_1_init(void)
 	threads_init();
 	motor_init();
 	threads_constructor(&fn1,1,0,0);
-	threads_constructor(&fn2,1000,0,1);
+	threads_constructor(&fn2,100,0,1);
 	threads_constructor(&fn3,100000,0,2);
 	
 	LED_RGB_CLR_ALL();

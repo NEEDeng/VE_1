@@ -6,6 +6,8 @@ src\Board.c
 
 src\motor.c
 
+src\sensors.c
+
 src\Threads.c
 
 src\VE_1.c

@@ -1,4 +1,4 @@
-# Object files
+ # Object files
 *.o
 *.ko
 *.obj
@@ -30,3 +30,12 @@
 
 # Debug files
 *.dSYM/
+.gitignore
+
+Doc/
+Estrutura/
+Img/
+Hardware/
+
+
+*.srec

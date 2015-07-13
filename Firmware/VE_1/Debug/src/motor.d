@@ -84,7 +84,8 @@ src/motor.d src/motor.o: ../src/motor.c ../src/Board.h \
  ../src/ASF/sam0/utils/cmsis/samd20/include/samd20.h \
  ../src/ASF/sam0/utils/cmsis/samd20/include/samd20g17.h \
  ../src/ASF/common/utils/interrupt.h \
- ../src/ASF/common/utils/interrupt/interrupt_sam_nvic.h ../src/watches.h
+ ../src/ASF/common/utils/interrupt/interrupt_sam_nvic.h ../src/watches.h \
+ ../src/sensors.h
 
 ../src/Board.h:
 
@@ -265,3 +266,5 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\arm\ gcc\native\4.8.1429\arm-gnu
 ../src/ASF/common/utils/interrupt/interrupt_sam_nvic.h:
 
 ../src/watches.h:
+
+../src/sensors.h:

@@ -96,7 +96,8 @@ src/main.d src/main.o: ../src/main.c ../src/asf.h \
  ../src/ASF/sam0/drivers/system/reset/reset_sam_d_r/reset.h \
  ../src/ASF/sam0/drivers/system/interrupt/system_interrupt.h \
  ../src/ASF/sam0/drivers/system/interrupt/system_interrupt_samd20/system_interrupt_features.h \
- ../src/Threads.h ../src/Board.h ../src/VE_1.h
+ ../src/Threads.h ../src/Board.h ../src/VE_1.h ../src/sensors.h \
+ ../src/watches.h
 
 ../src/asf.h:
 
@@ -303,3 +304,7 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\arm\ gcc\native\4.8.1429\arm-gnu
 ../src/Board.h:
 
 ../src/VE_1.h:
+
+../src/sensors.h:
+
+../src/watches.h:

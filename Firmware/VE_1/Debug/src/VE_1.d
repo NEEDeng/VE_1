@@ -71,7 +71,7 @@ src/VE_1.d src/VE_1.o: ../src/VE_1.c ../src/Board.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\arm\ gcc\native\4.8.1429\arm-gnu-toolchain\arm-none-eabi\include\stdlib.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\arm\ gcc\native\4.8.1429\arm-gnu-toolchain\arm-none-eabi\include\machine\stdlib.h \
  c:\program\ files\ (x86)\atmel\atmel\ toolchain\arm\ gcc\native\4.8.1429\arm-gnu-toolchain\arm-none-eabi\include\alloca.h \
- ../src/Threads.h ../src/watches.h
+ ../src/Threads.h ../src/watches.h ../src/motor.h
 
 ../src/Board.h:
 
@@ -222,3 +222,5 @@ c:\program\ files\ (x86)\atmel\atmel\ toolchain\arm\ gcc\native\4.8.1429\arm-gnu
 ../src/Threads.h:
 
 ../src/watches.h:
+
+../src/motor.h:

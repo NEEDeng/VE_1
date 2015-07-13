@@ -32,6 +32,7 @@
 #include "Threads.h"
 #include "Board.h"
 #include "VE_1.h"
+#include "sensors.h"
 #define true 1
 #define false !true
 struct thread_s list_thread_s[THREADS_MAX_N]; /**<Array contendo todas as threads do sistema.*/
@@ -43,12 +44,13 @@ struct thread_s list_thread_s[THREADS_MAX_N]; /**<Array contendo todas as thread
  */
 volatile char TC0_FLAG = false;
 volatile char SERCOM5_FLAG = false;
+volatile char ADC_FLAG = false;
 int main(void)
 {
     /* Initialize the SAM system */
 	system_init();
 	ve_1_init();
-		LED_RGB_SET(COLOUR_BLUE);
+	//	LED_RGB_SET(COLOUR_BLUE);
 		volatile int ii=0;
 		
     while (1) 
@@ -64,6 +66,11 @@ int main(void)
 		{
 			debug_send_byte_hand();
 			SERCOM5_FLAG = false;
+		}
+		if(ADC_FLAG)
+		{
+			adc_run();
+			ADC_FLAG = false;
 		}
 	
     }
@@ -83,5 +90,8 @@ void SERCOM5_Handler()
 
 void ADC_Handler()
 {
+	ADC_FLAG = true;
+	adc_run();
+	ADC->INTENSET.reg = ADC_INTENSET_RESRDY;
 	
 }
