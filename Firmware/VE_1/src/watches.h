@@ -45,7 +45,7 @@ struct _watch_alarm_s
 void watches_init(void);
 char watches_set_cronos(int n);
 char watches_get_cronos_counter(int n, uint32_t *val);
-char watches_get_cronos_ms(int n, uint16_t *val);
+char watches_get_cronos_ms(int n, uint32_t *val);
 char watches_set_cronos_flag(int n, int flag);
 char watches_set_alarm(int n, uint32_t referencia);
 char watches_get_alarm_flag(int n, enum WATCH_ALARM_FLAG *flag);
@@ -54,4 +54,10 @@ char watches_set_alarm_flag(int n, enum WATCH_ALARM_FLAG flag);
 char watches_run(void);
 char watches_set_alarm_ms(int n, uint32_t ms);
 char watches_set_alarm_hz(int n, float hz);
+char watches_cronos_finish(int n);
+#define WATCHES_DUMMY_F_CLK 48000000UL
+#define WATCHES_DUMMY_F_CLK_MS (WATCHES_DUMMY_F_CLK/48000)
+#define WATCHES_DUMMY_F_CLK_US (WATCHES_DUMMY_F_CLK/48)
+enum WATCHES_DUMMY_TYPE {WATCHES_DUMMY_MS, WATCHES_DUMMY_US};
+char watches_dummy_delay_ms(uint16_t time, enum WATCHES_DUMMY_TYPE watch_type);
 #endif /* WATCHES_H_ */

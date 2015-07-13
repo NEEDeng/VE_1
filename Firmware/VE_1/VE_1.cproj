@@ -442,6 +442,12 @@
     <Compile Include="src\motor.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\sensors.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\sensors.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\Threads.c">
       <SubType>compile</SubType>
     </Compile>

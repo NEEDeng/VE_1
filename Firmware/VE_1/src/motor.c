@@ -8,6 +8,7 @@
 #include "motor.h"
 #include "compiler.h"
 #include "watches.h"
+#include "sensors.h"
 //#define true	1
 //#define false	!true
 
@@ -46,6 +47,7 @@ char motor_init(void)
 	};
 	statefunc = motor_find_min_max;
 }
+#define MIN_MAX_PRECISION	3
 char motor_set_duty(enum MOTOR_SIDE_FLAG motor_side, uint8_t duty, enum MOTOR_DIRECTION_FLAG dir)
 {
 	float real_duty =0;
@@ -79,65 +81,97 @@ char motor_find_min_max(void)
 	static uint8_t valor_str[7];
 	uint16_t  adc_val;
 	static uint16_t max_val=0,max_val_last=1;
+	uint32_t cronos_ms;
 	uint16_t min_val= UINT16_MAX, min_val_last=UINT16_MAX;
-	motor_set_duty(MOTOR_SIDE_RIGHT,55,MOTOR_DIRECTION_CC);
-	LED_RGB_SET(COLOUR_RED);
+	static count =0;
+	
+	motor_set_duty(MOTOR_SIDE_RIGHT,65,MOTOR_DIRECTION_C);
+	
 	goto  *goto_jump;
+	
 	init:
-	watches_set_alarm_hz(0,0.5);
+	LED_RGB_SET(COLOUR_RED);
+
+	watches_set_alarm_hz(0,0.3);
 timer_1:
-	if(!wathces_is_alarm_finished(0))
+	adc_val = adc_data[0]; //leia a cada retorno dessa funcao
+	count++;
+	if(count>9)
+	{
+	//	debug_send_data_handler_number(adc_val);
+			if(adc_val>max_val) //fique com o valor maximo
+				{
+					
+						max_val = adc_val;
+				
+				}
+		}
+			
+	if(!wathces_is_alarm_finished(0)) //enqnato nao terminou
 	{
 		goto_jump = &&timer_1;
 		return 0;
 	}
-	
-	
-//	while(true)
-LED_RGB_CLR(COLOUR_RED);
-timer_2:
+	else
 	{
-		watches_set_alarm(0,2);
-		adc_val = adc_read();
-		max_val = max(adc_val,max_val);
-		if(max_val == max_val_last)
-		{
-			goto timer_2_end;
-		}
-		max_val_last = max(max_val_last,max_val);
+		goto_jump = &&until_next_max;	
+	}
+	LED_RGB_CLR_ALL();
+	LED_RGB_SET(COLOUR_BLUE);
+	return 0;
+	/*Esperaremos pelo proximo pico */
+until_next_max:
+adc_val =  adc_data[0];
+	if((max_val < (adc_val+MIN_MAX_PRECISION)) && (max_val > (adc_val-MIN_MAX_PRECISION)))
+	{
+		goto_jump = &&time_peak_measure;	
+		debug_send_data_handler_number(adc_val);
 		
-timer_2_wait:
-		if(!wathces_is_alarm_finished(0))
+	}
+	else
+	{
+	return 0;
+	
+	}
+
+/*Agora vamos medir o tempo entre maximos */
+LED_RGB_CLR_ALL();
+LED_RGB_SET(COLOUR_GREEN);
+
+watches_set_cronos(0);
+count=0;
+time_peak_measure:
+	{
+		
+					count++;
+		adc_val= adc_data[0];
+			//debug_send_data_handler_number(adc_val);
+		if((max_val < (adc_val+MIN_MAX_PRECISION)) && (max_val > (adc_val-MIN_MAX_PRECISION)))
 		{
-			goto_jump = &&timer_2_wait;
-			return 0;
-		}	
+			if(count>50)
+			{
+				watches_cronos_finish(0);
+				watches_get_cronos_ms(0, &cronos_ms);
+				debug_send_data_handler_number(cronos_ms);
+			}
+			
+			else
+			{
+
+				return 0;
+				}
+		}
 		else
 		{
-			goto timer_2;
+			return 0;
+			
 		}
-	}
-timer_2_end:	
-	
-	LED_RGB_SET(COLOUR_GREEN);
-	sprintf(valor_str ,"%0.5d" , max_val);
-	//itoa(valor_int,valor_str,10);
 
-	for(int i=0;i<7;i++)
-	{
-		debug_s.data_tx[i] = valor_str[i];
 	}
-		valor_str[5] ='\r';
-		valor_str[6] = '\n';
 	
-	//while(true)
-	{
-		motor_set_duty(MOTOR_SIDE_RIGHT,0,MOTOR_DIRECTION_CC);
-		debug_send_data_handler(7);
-	//		dummy_delay_ms(500);
-			//LED_RGB_SET(COLOUR_BLUE);
-	}
-	statefunc = motor_run;
+	motor_set_duty(MOTOR_SIDE_RIGHT,0,MOTOR_DIRECTION_CC);
+	
+	statefunc =motor_run;
 		return 0;
 }
 char motor_run(void)

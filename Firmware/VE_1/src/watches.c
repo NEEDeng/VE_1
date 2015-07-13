@@ -5,6 +5,8 @@
  *  Author: Tulio
  */ 
 #include "watches.h"
+#define THREAD_STEP_US	10
+#define THREAD_STEP_MS	(1000/THREAD_STEP_US)
 void watches_init(void)
 {
 	for(int i=0;i<WATCH_CRONOS_N;i++)
@@ -34,12 +36,12 @@ char watches_set_cronos(int n)
 		return -1;
 	}
 }
-char watches_get_cronos_ms(int n, uint16_t *val)
+char watches_get_cronos_ms(int n, uint32_t *val)
 {
 	uint32_t temp_val=0;
-	if(watches_get_cronos_counter(n, temp_val))
+	if(watches_get_cronos_counter(n, &temp_val))
 	{
-		*val = temp_val/WATCH_FINAL_FREQ_KHZ;
+		*val = temp_val/THREAD_STEP_MS;
 		return 0 ;
 	}
 	else
@@ -64,6 +66,10 @@ char watches_get_cronos_counter(int n, uint32_t *val)
 		return -1;
 	}
 }
+char watches_cronos_finish(int n)
+{
+	return watches_set_cronos_flag(n,WATCH_CRONOS_FINISHED);
+}
 char watches_set_cronos_flag(int n, int flag)
 {
 	if(n<WATCH_CRONOS_N)
@@ -76,8 +82,7 @@ char watches_set_cronos_flag(int n, int flag)
 		return -1;
 	}
 }
-#define THREAD_STEP_US	10
-#define THREAD_STEP_MS	1000/THREAD_STEP_US
+
 char watches_set_alarm_ms(int n, uint32_t ms)
 {
 	uint32_t referencia =  ms*THREAD_STEP_MS;
@@ -161,6 +166,29 @@ char watches_set_alarm_flag(int n,  enum WATCH_ALARM_FLAG flag)
 	}
 }
 
+
+char watches_dummy_delay_ms(uint16_t time, enum WATCHES_DUMMY_TYPE watch_type)
+{
+	
+	volatile int i=0;
+	volatile int k=0;
+	uint16_t dummy_clk;
+	if(watch_type == WATCHES_DUMMY_US)
+	{
+		dummy_clk = WATCHES_DUMMY_F_CLK_US; 
+	}
+	else
+	{
+		dummy_clk = WATCHES_DUMMY_F_CLK_MS; 
+	}
+	
+	for(k=0;k<time;k++)
+	{
+		for(i=0;i<dummy_clk;i++)
+		{}
+	}
+	return 0;
+}
 char watches_run(void)
 {
 	for(int i=0;i<WATCH_CRONOS_N;i++)

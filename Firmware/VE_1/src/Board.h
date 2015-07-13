@@ -90,7 +90,10 @@ void board_init(void);
 void adc_test(void);
 char debug_send_byte_hand();
 char debug_send_data_handler(int size);
-void dummy_delay_ms(uint16_t ms);
+
+char debug_send_data_handler_buffer(uint8_t *buffer_ptr,int size);
+char debug_send_data_handler_number(uint16_t number);
+uint16_t adc_read_handler(void);
 enum DEBUG_S_FLAG {DEBUG_S_SENDING, DEBUG_S_IDLE, DEBUG_S_RECEIVING};
 struct _debug_s
 {

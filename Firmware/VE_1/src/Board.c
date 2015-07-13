@@ -46,17 +46,7 @@ void thread_init(void)
 		NVIC_SetPriority(TC0_IRQn,2);
 		NVIC_EnableIRQ(TC0_IRQn);
 }
-#define F_CLK 48000000UL
-void dummy_delay_ms(uint16_t ms)
-{
-	volatile int i=0;
-	volatile int k=0;
-	for(k=0;k<ms;k++)
-	{
-		for(i=0;i<48000;i++)
-		{}
-	}
-}
+
 void timer_init(void)
 {
 	PM->APBCMASK.reg			|=	PM_APBCMASK_TC1; //enable clock to timer 0
@@ -165,6 +155,35 @@ char debug_send_byte( char data)
 	return 0;
 	}
 
+char debug_send_data_handler_number(uint16_t number)
+{
+	static uint8_t valor_str[7];
+	
+	sprintf(valor_str ,"%0.5d" , number);
+	
+	valor_str[5] ='\r';
+	valor_str[6] = '\n';
+	for(int i=0;i<7;i++)
+	{
+		debug_s.data_tx[i] = valor_str[i];
+	}
+	return  debug_send_data_handler(7);
+	
+}
+
+char debug_send_data_handler_buffer(uint8_t *buffer_ptr,int size)
+{
+		
+	for(int i=0;i<7;i++)
+	{
+		debug_s.data_tx[i] = *buffer_ptr++;
+	}
+	return  debug_send_data_handler(size);
+	
+}
+
+
+
 char debug_send_data_handler(int size)
 
 {
@@ -249,17 +268,20 @@ void adc_init(void)
 	ADC_MOTOR2_PORT_CONF.PINCFG[ADC_MOTOR2_PORT_N].reg |= PORT_PINCFG_PMUXEN;// | PORT_PINCFG_PULLEN;
 
 	
-
-	//ADC->AVGCTRL.reg = ADC_AVGCTRL_SAMPLENUM_64 | (4<<ADC_AVGCTRL_ADJRES_Pos);
+	ADC->INTENSET.bit.RESRDY = true;
+	ADC->AVGCTRL.reg = ADC_AVGCTRL_SAMPLENUM_8 | (3<<ADC_AVGCTRL_ADJRES_Pos);
+	
 	ADC->REFCTRL.reg |= ADC_REFCTRL_REFSEL_INTVCC1;
-	//ADC->SAMPCTRL.reg = ADC_SAMPCTRL_SAMPLEN(0xFF);
+	ADC->SAMPCTRL.reg = ADC_SAMPCTRL_SAMPLEN(2);
 	ADC->INPUTCTRL.reg |= ADC_INPUTCTRL_MUXPOS_PIN18 | ADC_INPUTCTRL_MUXNEG_GND | ADC_INPUTCTRL_GAIN_DIV2;
 	while(ADC->STATUS.bit.SYNCBUSY){}
-	ADC->CTRLB.reg |=  ADC_CTRLB_PRESCALER_DIV512;//| ADC_CTRLB_RESSEL_16BIT;ADC_CTRLB_FREERUN
+	ADC->CTRLB.reg |=  ADC_CTRLB_FREERUN | ADC_CTRLB_RESSEL_16BIT;
 	while(ADC->STATUS.bit.SYNCBUSY){}
 	ADC->CTRLA.reg |= ADC_CTRLA_ENABLE;
 	while(ADC->STATUS.bit.SYNCBUSY){}
 	ADC->SWTRIG.bit.START = true;
+	NVIC_SetPriority(ADC_IRQn,4);
+	NVIC_EnableIRQ(ADC_IRQn);
 
 }
 
@@ -274,16 +296,19 @@ uint16_t adc_read(void)
 	
 	valor_int = ADC->RESULT.reg;
 	
-	sprintf(valor_str ,"%0.5d" , valor_int);
-	//itoa(valor_int,valor_str,10);
-	valor_str[5] ='\r';
-	valor_str[6] = '\n';
-	for(int i=0;i<7;i++)
-	{
-		debug_s.data_tx[i] = valor_str[i];
-	}
+//	debug_send_data_handler_number(valor_int);
 	ADC->INTFLAG.reg = ADC_INTFLAG_RESRDY;
-	//debug_send_data_handler(7);
+	
+	return valor_int;
+}
+
+uint16_t adc_read_handler(void)
+{
+	uint16_t valor_int=0;
+	
+	valor_int = ADC->RESULT.reg;
+	ADC->INTFLAG.reg = ADC_INTFLAG_RESRDY;
+	
 	return valor_int;
 }
 
